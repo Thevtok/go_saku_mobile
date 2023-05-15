@@ -1,7 +1,12 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
-import 'package:go_saku/core/network/api_client.dart';
-import 'package:go_saku/app/domain/model/user.dart';
+import 'package:go_saku/core/network/api_user.dart';
+import 'package:go_saku/domain/model/user.dart';
+
+import '../../core/utils/hive_service.dart';
+import '../model/abstract/repository/userRepo.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final ApiClient _apiClient;
@@ -20,14 +25,45 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> login(String email, String password) async {
-    final response = await _apiClient
-        .post(path: '/login', body: {'email': email, 'password': password});
-    if (response['statusCode'] == 200) {
-      final userJson = response['data'];
-      return User.fromJson(userJson);
-    } else {
-      throw Exception('Failed to login');
+  Future<String?> login(String email, String password) async {
+    try {
+      final response = await _apiClient.post(
+        path: '/login',
+        body: {'email': email, 'password': password},
+      );
+
+      if (response['statusCode'] == 200) {
+        final token = response['result']['token'] as String;
+
+        await HiveService.saveToken(
+            token); // Simpan token menggunakan HiveService
+
+        return token;
+      } else {
+        throw Exception('Failed to login');
+      }
+    } catch (e) {
+      throw Exception('Failed to login: $e');
+    }
+  }
+
+  @override
+  Future<UserResponse?> getByUsername(String username) async {
+    try {
+      final token = await HiveService.getToken();
+      final response = await _apiClient.get(
+        '/user/$username',
+        headers: {'Authorization': '$token'},
+      );
+
+      if (response != null) {
+        final user = UserResponse.fromJson(response);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to get user profile: $e');
     }
   }
 
@@ -38,19 +74,6 @@ class UserRepositoryImpl implements UserRepository {
       return 'User deleted successfully';
     } else {
       throw Exception('Failed to delete user');
-    }
-  }
-
-  @override
-  Future<User?> getById(int id) async {
-    final response = await _apiClient.get('/user/$id');
-    if (response['statusCode'] == 200) {
-      final dynamic userJson = jsonDecode(response['body']);
-      return User.fromJson(userJson);
-    } else if (response['statusCode'] == 404) {
-      return null;
-    } else {
-      throw Exception('Failed to get user');
     }
   }
 

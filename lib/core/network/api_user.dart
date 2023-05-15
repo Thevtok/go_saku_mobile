@@ -3,13 +3,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static const String baseUrl = 'http://11.11.254.187';
+  static const String baseUrl = "http://11.11.203.177:8080";
 
-  Future<Map<String, dynamic>> get(String path) async {
-    final response = await http.get(Uri.parse('$baseUrl$path'));
+  Future<Map<String, dynamic>> get(String path,
+      {Map<String, String>? headers}) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl$path'), headers: headers);
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      var jsonresponse = jsonDecode(response.body);
+      var result = jsonresponse['result'];
+      return result;
     } else {
       throw Exception('Failed to load data from API');
     }

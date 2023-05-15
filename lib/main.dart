@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:go_saku/app/domain/presentasion/screens/login_screen.dart';
+import 'package:go_saku/domain/screens/login_screen.dart';
 
-void main() {
+import 'core/utils/hive_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveService.init();
+
   runApp(const MyApp());
 }
 

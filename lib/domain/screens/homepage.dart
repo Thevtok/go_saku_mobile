@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_saku/app/domain/presentasion/screens/profile_screen.dart';
+import 'package:go_saku/domain/screens/profile_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,10 +15,10 @@ class _HomePagState extends State<HomePage> {
     setState(() {
       switch (index) {
         case 0:
-          Get.to(const HomePage());
+          Get.off(const HomePage());
           break;
         case 1:
-          Get.to(const HomePage());
+          Get.off(const HomePage());
           break;
         case 2:
           Get.off(const profile_Screen());
@@ -163,46 +163,66 @@ class _HomePagState extends State<HomePage> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 200, left: 20),
-              height: 80,
-              width: 320,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: constraints.maxHeight * 0.4),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 80,
+                      width: 320,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildGestureDetectorWithIcon(
+                              () {}, Icons.wallet, 'Top Up'),
+                          buildGestureDetectorWithIcon(
+                              () {}, Icons.send, 'Transfer'),
+                          buildGestureDetectorWithIcon(
+                              () {}, Icons.receipt, 'Request'),
+                          buildGestureDetectorWithIcon(
+                              () {}, Icons.history, 'History'),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildGestureDetectorWithIcon(() {}, Icons.wallet, 'Top Up'),
-                  buildGestureDetectorWithIcon(() {}, Icons.send, 'Transfer'),
-                  buildGestureDetectorWithIcon(() {}, Icons.receipt, 'Request'),
-                  buildGestureDetectorWithIcon(() {}, Icons.history, 'History'),
-                ],
-              ),
+                );
+              },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 540, left: 20),
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height *
+                    0.78, // Ubah nilai 0.675 sesuai kebutuhan Anda
+                left: MediaQuery.of(context).size.width *
+                    0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
+              ),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     buildImageContainer('lib/assets/flip1.jpg'),
-                    const SizedBox(
-                      width: 20,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width *
+                          0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
                     ),
                     buildImageContainer('lib/assets/flip2.png'),
-                    const SizedBox(
-                      width: 20,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width *
+                          0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
                     ),
                     buildImageContainer('lib/assets/flip3.jpg'),
                   ],
