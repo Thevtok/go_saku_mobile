@@ -40,6 +40,7 @@ dependencies:
   get: ^4.6.5
   hive: ^2.0.0
   hive_flutter: ^1.1.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,12 @@ flutter:
      - lib\assets\flip2.png
      - lib\assets\flip3.jpg
      - lib\assets\abstrak.jpg
+     - lib\assets\mandiri.png
+     - lib\assets\bca.png
+     - lib\assets\bi.png
+     - lib\assets\bni.png
+     - lib\assets\bri.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

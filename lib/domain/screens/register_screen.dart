@@ -8,7 +8,7 @@ import 'package:go_saku/core/network/api_user.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
 
-import '../../app/controller/register.dart';
+import '../../app/controller/textediting_controller.dart';
 import '../../app/dialog/showDialog.dart';
 import '../../app/widgets/register_widget.dart';
 import '../model/abstract/usecase/userUsecase.dart';

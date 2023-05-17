@@ -19,12 +19,30 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> post({
-    required String path,
-    required Map<String, dynamic> body,
-  }) async {
+  Future<List<dynamic>> getList(String path,
+      {Map<String, String>? headers}) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl$path'), headers: headers);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      var result = jsonResponse['result'];
+      if (result is List) {
+        return result;
+      } else {
+        throw Exception('Invalid response format. Expected List.');
+      }
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
+
+  Future<Map<String, dynamic>> post(
+      {required String path,
+      required Map<String, dynamic> body,
+      headers}) async {
     final response = await http.post(Uri.parse('$baseUrl$path'),
-        headers: {'Content-Type': 'application/json'}, body: jsonEncode(body));
+        headers: headers, body: jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
@@ -45,8 +63,14 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> delete(String path) async {
-    final response = await http.delete(Uri.parse('$baseUrl$path'));
+  Future<Map<String, dynamic>> delete({
+    required String path,
+    Map<String, String>? headers,
+  }) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl$path'),
+      headers: headers,
+    );
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

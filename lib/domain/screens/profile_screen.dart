@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_saku/domain/screens/bank.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
+import 'package:intl/intl.dart';
 
 import '../../app/widgets/profile_widget.dart';
 import '../../core/network/api_user.dart';
@@ -131,12 +133,18 @@ class _profile_ScreenState extends State<profile_Screen> {
                       child: const Text(
                         'GENERAL INFORMATION',
                         style: TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w500),
+                            color: Colors.black, fontWeight: FontWeight.w500),
                       ),
                     ),
                     buildRowWithIcon(
-                        "Saldo", 'Rp ${user.balance}', Icons.arrow_forward),
-                    buildRowWithIcon("Bank Account", "1", Icons.arrow_forward),
+                      "Saldo",
+                      'Rp ${NumberFormat('#,###').format(user.balance)}',
+                      Icons.arrow_forward,
+                    ),
+                    buildRowWithIconButton(
+                        "Bank Account", "1", Icons.arrow_forward, () {
+                      Get.to(const BankPage());
+                    }),
                     buildRowWithIcon("Card Account", "1", Icons.arrow_forward),
                     Container(
                       alignment: Alignment.topLeft,
@@ -144,7 +152,7 @@ class _profile_ScreenState extends State<profile_Screen> {
                       child: const Text(
                         'EMAIL AND PASSWORD',
                         style: TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w500),
+                            color: Colors.black, fontWeight: FontWeight.w500),
                       ),
                     ),
                     buildRowWithIcon("Email", user.email, Icons.arrow_forward),
@@ -155,7 +163,7 @@ class _profile_ScreenState extends State<profile_Screen> {
                       child: const Text(
                         'ACCOUNT INFORMATION',
                         style: TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w500),
+                            color: Colors.black, fontWeight: FontWeight.w500),
                       ),
                     ),
                     buildRowWithIcon(

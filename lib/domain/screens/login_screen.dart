@@ -9,7 +9,7 @@ import 'package:go_saku/app/widgets/register_widget.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:go_saku/domain/screens/register_screen.dart';
 
-import '../../app/controller/register.dart';
+import '../../app/controller/textediting_controller.dart';
 import '../model/abstract/usecase/userUsecase.dart';
 
 import '../use_case/user_usecase.dart';

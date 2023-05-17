@@ -49,5 +49,20 @@ Future<String?> getTokenUsername() async {
     return username;
   }
 
-  return null; // Token tidak valid atau tidak ada
+  return null;
+}
+
+Future<int?> getTokenUserId() async {
+  String? token = await HiveService.getToken();
+
+  if (token != null && token.isNotEmpty) {
+    Map<String, dynamic> decodedToken = json.decode(
+        ascii.decode(base64.decode(base64.normalize(token.split('.')[1]))));
+
+    int userId = decodedToken['user_id'];
+
+    return userId;
+  }
+
+  return null;
 }

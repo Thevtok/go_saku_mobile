@@ -15,8 +15,10 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> create(User user) async {
-    final response =
-        await _apiClient.post(path: '/register', body: user.toJson());
+    final response = await _apiClient.post(
+      path: '/register',
+      body: user.toJson(),
+    );
     if (response['statusCode'] == 201) {
       return 'User created successfully';
     } else {
@@ -69,7 +71,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> delete(int id) async {
-    final response = await _apiClient.delete('/user/$id');
+    final response = await _apiClient.delete(path: '/user/$id');
     if (response['statusCode'] == 204) {
       return 'User deleted successfully';
     } else {
