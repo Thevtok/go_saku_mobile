@@ -212,8 +212,11 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
                 },
               );
               int? amount = int.tryParse(amountController.text);
-              DepositBank depo =
-                  DepositBank(senderName: bank.name, amount: amount);
+              DepositBank depo = DepositBank(
+                  senderName: bank.name,
+                  amount: amount,
+                  bankName: bank.bankName,
+                  accountNumber: bank.accountNumber);
 
               final result = await txUsecase.makeDepositBank(
                   bank.userId!, selectedAccountId!, depo);

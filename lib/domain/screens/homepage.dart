@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_saku/domain/screens/deposit_screen.dart';
+import 'package:go_saku/domain/screens/history_screen.dart';
 import 'package:go_saku/domain/screens/profile_screen.dart';
+import 'package:go_saku/domain/screens/transfer_screen.dart';
 import 'package:go_saku/domain/use_case/user_usecase.dart';
 
 import '../../app/widgets/home_widget.dart';
@@ -244,12 +246,14 @@ class _HomePagState extends State<HomePage> {
                                   buildGestureDetectorWithIcon(() {
                                     Get.to(const DepositPage());
                                   }, Icons.wallet, 'Top Up'),
-                                  buildGestureDetectorWithIcon(
-                                      () {}, Icons.send, 'Transfer'),
+                                  buildGestureDetectorWithIcon(() {
+                                    Get.to(const transfer_Screen());
+                                  }, Icons.send, 'Transfer'),
                                   buildGestureDetectorWithIcon(
                                       () {}, Icons.receipt, 'Request'),
-                                  buildGestureDetectorWithIcon(
-                                      () {}, Icons.history, 'History'),
+                                  buildGestureDetectorWithIcon(() {
+                                    Get.to(const HistoryPage());
+                                  }, Icons.history, 'History'),
                                 ],
                               ),
                             ),

@@ -54,7 +54,27 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final token = await HiveService.getToken();
       final response = await _apiClient.get(
-        '/user/$username',
+        '/user/username/$username',
+        headers: {'Authorization': '$token'},
+      );
+
+      if (response != null) {
+        final user = UserResponse.fromJson(response);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to get user profile: $e');
+    }
+  }
+
+  @override
+  Future<UserResponse?> getByPhone(String phone) async {
+    try {
+      final token = await HiveService.getToken();
+      final response = await _apiClient.get(
+        '/user/$phone',
         headers: {'Authorization': '$token'},
       );
 

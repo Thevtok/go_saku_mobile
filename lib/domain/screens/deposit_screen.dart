@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_saku/app/widgets/bank_widget.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
+import '../../app/controller/textediting_controller.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
 import '../model/bank.dart';
@@ -12,6 +13,9 @@ import '../use_case/bank_usecase.dart';
 
 class DepositPage extends StatefulWidget {
   const DepositPage({Key? key}) : super(key: key);
+  void dispose() {
+    amountController.dispose();
+  }
 
   @override
   _DepositPageState createState() => _DepositPageState();
@@ -85,9 +89,11 @@ class _DepositPageState extends State<DepositPage> {
                       DropdownButtonFormField<Bank>(
                         isExpanded: true,
                         decoration: const InputDecoration(
-                          labelText: 'Bank',
-                          border: OutlineInputBorder(),
-                        ),
+                            labelText: 'Bank',
+                            labelStyle: TextStyle(
+                                color: Colors.blueAccent, fontSize: 20),
+                            border: OutlineInputBorder(),
+                            fillColor: Colors.blueAccent),
                         value: null,
                         onChanged: (Bank? bank) {
                           setState(() {
@@ -97,7 +103,10 @@ class _DepositPageState extends State<DepositPage> {
                         items: [
                           const DropdownMenuItem(
                             value: null,
-                            child: Text('Pilih Bank'),
+                            child: Text(
+                              'Pilih Bank',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                           for (var bank in banks!)
                             DropdownMenuItem(

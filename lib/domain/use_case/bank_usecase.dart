@@ -14,6 +14,11 @@ class BankUseCaseImpl implements BankUsecase {
   }
 
   @override
+  Future<Bank> findByAccountID(int userId, int accountId) async {
+    return await _repository.getByAccountID(userId, accountId);
+  }
+
+  @override
   Future<dynamic> add(int id, Bank newBankAcc) async {
     return await _repository.create(id, newBankAcc);
   }

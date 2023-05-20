@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:go_saku/domain/model/abstract/repository/bankRepo.dart';
 
 import '../../core/network/api_user.dart';
@@ -51,6 +53,22 @@ class BankRepositoryImpl implements BankRepository {
       return 'Bank deleted successfully';
     } else {
       throw Exception('Failed to delete bank');
+    }
+  }
+
+  @override
+  Future<Bank> getByAccountID(int userId, int accountId) async {
+    final token = await HiveService.getToken();
+    final response = await _apiClient.get(
+      '/user/bank/$userId/$accountId',
+      headers: {'Authorization': '$token'},
+    );
+
+    if (response != null) {
+      final bank = Bank.fromJson(response);
+      return bank;
+    } else {
+      throw Exception('Failed to get bank');
     }
   }
 }

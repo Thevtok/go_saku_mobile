@@ -6,6 +6,7 @@ abstract class UserRepository {
   Future<String?> login(String email, String password);
   Future<List<User>> getAll();
   Future<UserResponse?> getByUsername(String username);
+  Future<UserResponse?> getByPhone(String phone);
   Future<String> create(User user);
   Future<String> update(User user);
   Future<String> delete(int id);

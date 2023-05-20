@@ -41,6 +41,15 @@ class UserUseCaseImpl implements UserUseCase {
   }
 
   @override
+  Future<UserResponse?> findByPhone(String phone) async {
+    try {
+      return await _repository.getByPhone(phone);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
   Future<String?> register(User user) async {
     try {
       if (!user.email.endsWith('@gmail.com')) {

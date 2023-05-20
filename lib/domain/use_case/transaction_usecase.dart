@@ -15,4 +15,14 @@ class TransactionUsecaseImpl implements TransactionUsecase {
     return await transactionRepository.createDepositBank(
         user_id, account_id, depositBank);
   }
+
+  @override
+  Future<String> makeTransfer(int user_id, Transfer transfer) async {
+    return await transactionRepository.createTransfer(user_id, transfer);
+  }
+
+  @override
+  Future<List<Transaction>> findTxByUserID(int id) async {
+    return await transactionRepository.getByUserID(id);
+  }
 }
