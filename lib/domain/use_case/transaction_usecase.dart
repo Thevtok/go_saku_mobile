@@ -17,6 +17,12 @@ class TransactionUsecaseImpl implements TransactionUsecase {
   }
 
   @override
+  Future<String> createWithdraw(
+      int user_id, int account_id, Withdraw withdraw) async {
+    return await transactionRepository.withdraw(user_id, account_id, withdraw);
+  }
+
+  @override
   Future<String> makeTransfer(int user_id, Transfer transfer) async {
     return await transactionRepository.createTransfer(user_id, transfer);
   }

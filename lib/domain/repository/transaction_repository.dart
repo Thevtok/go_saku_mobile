@@ -27,6 +27,22 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
+  Future<String> withdraw(
+      int user_id, int account_id, Withdraw withdraw) async {
+    final token = await HiveService.getToken();
+    final response = await _apiClient.post(
+      path: '/user/tx/wd/$user_id/$account_id',
+      body: withdraw.toJson(),
+      headers: {'Authorization': '$token'},
+    );
+    if (response['statusCode'] == 201) {
+      return 'withdraw to bank successfully';
+    } else {
+      throw Exception('Failed to withdraw');
+    }
+  }
+
+  @override
   Future<String> createTransfer(int user_id, Transfer transfer) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.post(

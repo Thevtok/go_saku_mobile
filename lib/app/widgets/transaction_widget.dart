@@ -39,11 +39,11 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
               return ListTile(
                 leading: transaction.senderName == username
                     ? const Icon(
-                        Icons.arrow_circle_right_sharp,
+                        Icons.arrow_circle_right,
                         color: Colors.redAccent,
                       )
                     : const Icon(
-                        Icons.arrow_circle_right_sharp,
+                        Icons.arrow_circle_left,
                         color: Colors.green,
                       ),
                 title: Padding(
@@ -87,7 +87,7 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
       } else if (transaction.transactionType == 'Deposit Bank') {
         return ListTile(
           leading: const Icon(
-            Icons.account_balance,
+            Icons.credit_card,
             color: Colors.green,
           ),
           title: const Padding(
@@ -111,6 +111,36 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
               fontSize: 15,
               fontWeight: FontWeight.w700,
               color: Colors.green,
+            ),
+          ),
+        );
+      } else if (transaction.transactionType == 'Withdraw') {
+        return ListTile(
+          leading: const Icon(
+            Icons.local_atm,
+            color: Colors.redAccent,
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(bottom: 4.0),
+            child: Text('Withdraw'),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Penarikan ke ${transaction.bankName} ${transaction.accountNumber} ${transaction.senderName.toUpperCase()}',
+              ),
+              Text(
+                DateFormat('yyyy-MM-dd').format(transaction.transactionDate),
+              ),
+            ],
+          ),
+          trailing: Text(
+            '-Rp.${NumberFormat('#,###').format(transaction.amount)}',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: Colors.redAccent,
             ),
           ),
         );

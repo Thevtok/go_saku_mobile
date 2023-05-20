@@ -1,134 +1,20 @@
-// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_saku/app/controller/textediting_controller.dart';
 import 'package:go_saku/domain/model/transaction.dart';
-import 'package:go_saku/domain/repository/transaction_repository.dart';
 import 'package:go_saku/domain/screens/history_screen.dart';
-import 'package:go_saku/domain/screens/profile_screen.dart';
-import 'package:go_saku/domain/use_case/transaction_usecase.dart';
 
 import '../../core/network/api_user.dart';
 import '../../domain/model/bank.dart';
-import '../../domain/repository/bank_repository.dart';
-import '../../domain/use_case/bank_usecase.dart';
+import '../../domain/repository/transaction_repository.dart';
+import '../../domain/use_case/transaction_usecase.dart';
 import '../circular_indicator/customCircular.dart';
+import '../controller/textediting_controller.dart';
 import '../dialog/showDialog.dart';
 import '../message/snackbar.dart';
 
-Widget buildBankList(List<Bank>? banks) {
-  final apiClient = ApiClient();
-  final bankRepo = BankRepositoryImpl(apiClient);
-  final bankUsecase = BankUseCaseImpl(bankRepo);
-  if (banks == null) {
-    // Tangani ketika banks null
-    return const SizedBox.shrink(); // Kembalikan widget kosong
-  }
-  return ListView.builder(
-    itemCount: banks.length,
-    itemBuilder: (context, index) {
-      final bank = banks[index];
-      Widget bankImage;
-      const double imageSize = 50.0; // Ukuran gambar yang diinginkan
-
-      if (bank.bankName.toLowerCase() == 'mandiri') {
-        bankImage = Image.asset('lib/assets/mandiri.png',
-            width: imageSize, height: imageSize);
-      } else if (bank.bankName.toLowerCase() == 'bca') {
-        bankImage = Image.asset('lib/assets/bca.png',
-            width: imageSize, height: imageSize);
-      } else if (bank.bankName.toLowerCase() == 'bri') {
-        bankImage = Image.asset('lib/assets/bri.png',
-            width: imageSize, height: imageSize);
-      } else if (bank.bankName.toLowerCase() == 'bni') {
-        bankImage = Image.asset('lib/assets/bni.png',
-            width: imageSize, height: imageSize);
-      } else {
-        bankImage = Image.asset('lib/assets/bi.png',
-            width: imageSize, height: imageSize);
-      }
-
-      return Card(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListTile(
-          leading: bankImage,
-          title: Text(bank.bankName),
-          subtitle: Text(bank.accountNumber),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              int? selectedAccountId = bank.accountId;
-              int? selectedUserId = bank.userId;
-
-              bool confirmed = await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Konfirmasi'),
-                    content: const Text('Anda yakin ingin menghapus bank ini?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Ya'),
-                        onPressed: () {
-                          Navigator.of(context).pop(
-                              true); // Mengirim nilai true jika "Ya" ditekan
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Tidak'),
-                        onPressed: () {
-                          Navigator.of(context).pop(
-                              false); // Mengirim nilai false jika "Tidak" ditekan
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-
-              if (confirmed == true) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return const CustomCircularProgressIndicator(
-                      message: 'Loading',
-                    );
-                  },
-                );
-
-                final result = await bankUsecase.unregByAccId(
-                  selectedUserId!,
-                  selectedAccountId!,
-                );
-
-                // Lanjutkan dengan logika setelah metode unregByAccId
-                if (result != null) {
-                  // Bank berhasil dihapus
-                  showCustomDialog(
-                    context,
-                    'Sukses',
-                    'Bank berhasil dihapus',
-                    () {
-                      Navigator.of(context).pop(); // Tutup dialog
-                      Get.off(const profile_Screen()); // Navigasi ke BankPage
-                    },
-                  );
-                } else {
-                  // Gagal menghapus bank
-                  showSnackBar(context, 'Gagal menghapus bank');
-                }
-              }
-            },
-          ),
-        ),
-      );
-    },
-  );
-}
-
-Widget buildBankListNoDelete(List<Bank>? banks) {
+Widget buildBankWithdraw(List<Bank>? banks) {
   final apiClient = ApiClient();
   final txRepo = TransactionRepositoryImpl(apiClient);
   final txUsecase = TransactionUsecaseImpl(txRepo);
@@ -179,7 +65,7 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
                     keyboardType: TextInputType.number,
                     controller: amountController,
                     decoration: const InputDecoration(
-                      labelText: 'Jumlah deposit',
+                      labelText: 'Jumlah withdraw',
                     ),
                   ),
                   actions: [
@@ -213,14 +99,14 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
                 },
               );
               int? amount = int.tryParse(amountController.text);
-              DepositBank depo = DepositBank(
+              Withdraw withdraw = Withdraw(
                   senderName: bank.name,
                   amount: amount,
                   bankName: bank.bankName,
                   accountNumber: bank.accountNumber);
 
-              final result = await txUsecase.makeDepositBank(
-                  bank.userId!, selectedAccountId!, depo);
+              final result = await txUsecase.createWithdraw(
+                  bank.userId!, selectedAccountId!, withdraw);
 
               // Lanjutkan dengan logika setelah metode unregByAccId
               if (result != null) {
@@ -228,7 +114,7 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
                 showCustomDialog(
                   context,
                   'Sukses',
-                  'Deposit Bank Sukses',
+                  'Withdraw to Bank Sukses',
                   () {
                     Navigator.of(context).pop(); // Tutup dialog
                     Get.off(const HistoryPage()); // Navigasi ke BankPage
@@ -236,7 +122,7 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
                 );
               } else {
                 // Gagal menghapus bank
-                showSnackBar(context, 'Gagal deposit bank');
+                showSnackBar(context, 'Gagal withdraw to bank');
               }
             }
           },

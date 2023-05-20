@@ -191,3 +191,57 @@ class Transfer {
     };
   }
 }
+
+class Withdraw {
+  String transactionType;
+
+  final String senderName;
+
+  final DateTime transactionDate;
+  int? senderID;
+
+  int? bankAccountID;
+
+  int? amount;
+  String bankName; // Tambahkan properti untuk bankName
+  String accountNumber;
+
+  Withdraw({
+    this.transactionType = 'Withdraw',
+    DateTime? transactionDate,
+    required this.senderName,
+    this.senderID,
+    this.bankAccountID,
+    required this.amount,
+    required this.bankName,
+    required this.accountNumber,
+  }) : transactionDate = transactionDate ?? DateTime.now();
+
+  factory Withdraw.fromJson(Map<String, dynamic> json) {
+    return Withdraw(
+      transactionType: json['transaction_type'] ?? 'Deposit Bank',
+      transactionDate: DateTime.parse(json['transaction_date'] ?? ''),
+      senderName: json['sender_name'] ?? '',
+      bankName: json['bank_name'] ?? '',
+      accountNumber: json['bank_account_number'] ?? '',
+      senderID: json['sender_id'],
+      bankAccountID: json['bank_account_id'],
+      amount: json['amount'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    final now = DateTime.now().toLocal();
+
+    final formattedDateTime =
+        '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    return {
+      'transaction_date': formattedDateTime,
+      'sender_name': senderName,
+      'senderID': senderID,
+      'bank_account_id': bankAccountID,
+      'amount': amount,
+      'bank_name': bankName,
+      'bank_account_number': accountNumber
+    };
+  }
+}

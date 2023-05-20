@@ -8,6 +8,7 @@ import 'package:go_saku/domain/repository/transaction_repository.dart';
 import 'package:go_saku/domain/screens/deposit_screen.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:go_saku/domain/screens/transfer_screen.dart';
+import 'package:go_saku/domain/screens/withdraw_screen.dart';
 import 'package:go_saku/domain/use_case/transaction_usecase.dart';
 import 'package:intl/intl.dart';
 
@@ -32,7 +33,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    containerHeight = MediaQuery.of(context).size.height / 1.8;
+    containerHeight = MediaQuery.of(context).size.height / 1.7;
     initialContainerHeight = containerHeight;
   }
 
@@ -185,7 +186,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                       buildColumnWithIconCircle(
                                           'Redeem', Icons.card_giftcard, () {}),
                                       buildColumnWithIconCircle(
-                                          'Withdraw', Icons.local_atm, () {}),
+                                          'Withdraw', Icons.local_atm, () {
+                                        Get.to(const WithdrawPage());
+                                      }),
                                     ],
                                   ),
                                 )
