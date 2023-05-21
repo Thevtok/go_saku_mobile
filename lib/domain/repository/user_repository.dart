@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_saku/core/network/api_user.dart';
 import 'package:go_saku/domain/model/user.dart';
 
@@ -37,8 +38,21 @@ class UserRepositoryImpl implements UserRepository {
       if (response['statusCode'] == 200) {
         final token = response['result']['token'] as String;
 
-        await HiveService.saveToken(
-            token); // Simpan token menggunakan HiveService
+        // Simpan token menggunakan HiveService
+        await HiveService.saveToken(token);
+
+        // Mendapatkan token perangkat
+        String? deviceToken = await FirebaseMessaging.instance.getToken();
+
+        // Menyertakan token perangkat dalam permintaan login
+        await _apiClient.post(
+          path: '/login',
+          body: {
+            'email': email,
+            'password': password,
+            'token': deviceToken,
+          },
+        );
 
         return token;
       } else {

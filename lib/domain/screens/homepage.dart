@@ -9,6 +9,8 @@ import 'package:go_saku/domain/use_case/user_usecase.dart';
 import '../../app/widgets/home_widget.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
+import '../model/abstract/repository/userRepo.dart';
+import '../model/abstract/usecase/userUsecase.dart';
 import '../model/user.dart';
 import '../repository/user_repository.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePagState extends State<HomePage> {
+  late ApiClient apiClient;
+  late UserRepository userRepository;
+  late UserUseCase userUsecase;
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -40,10 +45,17 @@ class _HomePagState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    apiClient = ApiClient();
+    userRepository = UserRepositoryImpl(apiClient);
+    userUsecase = UserUseCaseImpl(userRepository);
+   
+  }
+
+ 
+  @override
   Widget build(BuildContext context) {
-    final apiClient = ApiClient();
-    final userRepository = UserRepositoryImpl(apiClient);
-    final userUsecase = UserUseCaseImpl(userRepository);
     return FutureBuilder<UserResponse?>(
         future: getTokenUsername().then((String? username) {
           if (username != null) {

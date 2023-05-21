@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_saku/app/controller/textediting_controller.dart';
 import 'package:go_saku/app/widgets/transfer_widget.dart';
+import 'package:go_saku/domain/model/fcm.dart';
 import 'package:go_saku/domain/model/transaction.dart';
 import 'package:go_saku/domain/repository/transaction_repository.dart';
 import 'package:go_saku/domain/repository/user_repository.dart';
+import 'package:go_saku/domain/screens/history_screen.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:go_saku/domain/use_case/transaction_usecase.dart';
 import 'package:go_saku/domain/use_case/user_usecase.dart';
+import 'package:intl/intl.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
 import '../../app/dialog/showDialog.dart';
@@ -317,13 +320,16 @@ class transfer_Screen extends StatelessWidget {
                                               .makeTransfer(id!, transfer);
 
                                           if (result != null) {
+                                            showTransferNotification(
+                                                'Transfer Berhasil',
+                                                'Anda telah melakukan transfer sebesar Rp ${NumberFormat('#,###').format(transfer.amount)} kepada ${transfer.recipientName}');
                                             showCustomDialog(
                                               context,
                                               'success',
                                               'Transfer successfully',
                                               () {
                                                 Navigator.of(context).pop();
-                                                Get.off(const HomePage());
+                                                Get.off(const HistoryPage());
                                               },
                                             );
                                           } else {

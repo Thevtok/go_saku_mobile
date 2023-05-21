@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "438800775161",
+    "project_id": "go-saku",
+    "storage_bucket": "go-saku.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438800775161:android:bdf4eabeeb388eb31f6f28",
+        "android_client_info": {
+          "package_name": "com.example.go_saku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438800775161-1gqo56pv0dgmerq62jshqnj7i5k4l528.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.go_saku",
+            "certificate_hash": "6d24015701c5ec67a174acf8c1a80c98be98aae5"
+          }
+        },
+        {
+          "client_id": "438800775161-c3o9ljbk7qo2kl650qbmgp4b1jh1t5cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2HYdsdTWCEpxnZJ3VdJtItASA7tI1r3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438800775161-c3o9ljbk7qo2kl650qbmgp4b1jh1t5cl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
