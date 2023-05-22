@@ -22,6 +22,13 @@ class HiveService {
     return box.get('token');
   }
 
+  static Future<bool> hasToken() async {
+    final box = await Hive.openBox('auth');
+    final token = box.get('token') as String?;
+
+    return token != null;
+  }
+
   static Future<String?> getUsername() async {
     final box = await Hive.openBox('auth');
     return box.get('username');
@@ -30,6 +37,19 @@ class HiveService {
   static Future<void> deleteToken() async {
     final box = await Hive.openBox('auth');
     await box.delete('token');
+  }
+}
+
+bool isTokenExpired() {
+  // Dapatkan waktu saat ini
+  DateTime currentTime = DateTime.now();
+
+  DateTime expiryTime = currentTime.add(const Duration(hours: 1));
+
+  if (currentTime.isAfter(expiryTime)) {
+    return true;
+  } else {
+    return false;
   }
 }
 

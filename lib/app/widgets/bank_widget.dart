@@ -6,7 +6,7 @@ import 'package:go_saku/app/controller/textediting_controller.dart';
 import 'package:go_saku/domain/model/transaction.dart';
 import 'package:go_saku/domain/repository/transaction_repository.dart';
 import 'package:go_saku/domain/screens/history_screen.dart';
-import 'package:go_saku/domain/screens/profile_screen.dart';
+import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:go_saku/domain/use_case/transaction_usecase.dart';
 
 import '../../core/network/api_user.dart';
@@ -112,7 +112,7 @@ Widget buildBankList(List<Bank>? banks) {
                     'Bank berhasil dihapus',
                     () {
                       Navigator.of(context).pop(); // Tutup dialog
-                      Get.off(const profile_Screen()); // Navigasi ke BankPage
+                      Get.off(const HomePage()); // Navigasi ke BankPage
                     },
                   );
                 } else {

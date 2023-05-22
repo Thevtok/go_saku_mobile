@@ -1,7 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, unused_field
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_saku/app/widgets/bank_widget.dart';
+import 'package:go_saku/domain/screens/bank.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
 import '../../app/controller/textediting_controller.dart';
@@ -26,7 +28,7 @@ class _DepositPageState extends State<DepositPage> {
   late final bankRepo;
   late final bankUsecase;
 
-  late Future<List<Bank>> _bankListFuture;
+  late Future<List<Bank>?> _bankListFuture;
   late int _selectedBankId;
   late TextEditingController _amountController;
 
@@ -72,12 +74,27 @@ class _DepositPageState extends State<DepositPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: FutureBuilder<List<Bank>>(
+            child: FutureBuilder<List<Bank>?>(
               future: _bankListFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomCircularProgressIndicator(
                     message: 'Loading',
+                  );
+                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Silahkan tambah akun bank terlebih dahulu'),
+                      IconButton(
+                        onPressed: () {
+                          Get.off(const BankPage());
+                        },
+                        icon: const Icon(Icons.arrow_circle_right),
+                        color: Colors.blueAccent,
+                        iconSize: 40,
+                      )
+                    ],
                   );
                 } else if (snapshot.hasData) {
                   List<Bank>? banks = snapshot.data;
@@ -117,13 +134,8 @@ class _DepositPageState extends State<DepositPage> {
                       ),
                     ],
                   );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else {
-                  return const SizedBox.shrink();
                 }
+                return const Scaffold();
               },
             ),
           ),

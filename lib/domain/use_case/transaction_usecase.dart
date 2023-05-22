@@ -28,7 +28,7 @@ class TransactionUsecaseImpl implements TransactionUsecase {
   }
 
   @override
-  Future<List<Transaction>> findTxByUserID(int id) async {
+  Future<List<Transaction>?> findTxByUserID(int id) async {
     return await transactionRepository.getByUserID(id);
   }
 }

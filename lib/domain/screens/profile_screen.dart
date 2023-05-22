@@ -172,6 +172,9 @@ class _profile_ScreenState extends State<profile_Screen> {
                         "Address", user.address, Icons.arrow_forward),
                     buildRowWithIcon("Point          ", user.point.toString(),
                         Icons.arrow_forward),
+                    buildRowWithIconButton('Logout', '', Icons.logout, () {
+                      logout();
+                    })
                   ],
                 ),
               ),

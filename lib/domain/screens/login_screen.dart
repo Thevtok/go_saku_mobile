@@ -9,7 +9,6 @@ import 'package:go_saku/app/widgets/register_widget.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:go_saku/domain/screens/register_screen.dart';
 
-import '../../app/controller/textediting_controller.dart';
 import '../model/abstract/usecase/userUsecase.dart';
 
 import '../use_case/user_usecase.dart';
@@ -27,12 +26,21 @@ class login_Screnn extends StatefulWidget {
 
 // ignore: camel_case_types
 class _login_ScrennState extends State<login_Screnn> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool _isObscured = true;
 
   void _toggleObscureText() {
     setState(() {
       _isObscured = !_isObscured;
     });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose(); // Dispose of emailController
+    passwordController.dispose(); // Dispose of passwordController
+    super.dispose();
   }
 
   @override

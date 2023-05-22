@@ -1,6 +1,10 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:go_saku/domain/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
+
+import '../utils/hive_service.dart';
 
 class ApiClient {
   static const String baseUrl = "http://11.11.203.177:8080";
@@ -19,19 +23,28 @@ class ApiClient {
     }
   }
 
-  Future<List<dynamic>> getList(String path,
+  Future<dynamic> getListBank(String path,
       {Map<String, String>? headers}) async {
     final response =
         await http.get(Uri.parse('$baseUrl$path'), headers: headers);
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      var result = jsonResponse['result'];
-      if (result is List) {
-        return result;
-      } else {
-        throw Exception('Invalid response format. Expected List.');
-      }
+      return jsonResponse['result'];
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
+
+  Future<dynamic> getListTx(String path, {Map<String, String>? headers}) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl$path'), headers: headers);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      return jsonResponse['result'];
+    } else if (response.statusCode == 404) {
+      return "Transaction not found";
     } else {
       throw Exception('Failed to load data from API');
     }
@@ -78,4 +91,9 @@ class ApiClient {
       throw Exception('Failed to delete data from API');
     }
   }
+}
+
+void logout() async {
+  await HiveService.deleteToken();
+  Get.off(const login_Screnn());
 }

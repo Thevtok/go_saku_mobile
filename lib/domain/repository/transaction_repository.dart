@@ -58,16 +58,21 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<List<Transaction>> getByUserID(int id) async {
+  Future<List<Transaction>?> getByUserID(int id) async {
     try {
       final token = await HiveService.getToken();
-      final response = await _apiClient.getList(
+      final response = await _apiClient.getListTx(
         '/user/tx/$id',
         headers: {'Authorization': '$token'},
       );
-      final List<Transaction> txList =
-          response.map((txJson) => Transaction.fromJson(txJson)).toList();
-      return txList;
+      if (response == "Transaction not found") {
+        // Respons null, mengembalikan daftar bank kosong
+        return [];
+      }
+      final List<Transaction> transactionList = response
+          .map<Transaction>((json) => Transaction.fromJson(json))
+          .toList();
+      return transactionList;
     } catch (e) {
       throw Exception('Failed to get tx list: $e');
     }

@@ -9,7 +9,7 @@ class BankUseCaseImpl implements BankUsecase {
   BankUseCaseImpl(this._repository);
 
   @override
-  Future<List<Bank>> findByUserID(int id) async {
+  Future<List<Bank>?> findByUserID(int id) async {
     return await _repository.getByUserID(id);
   }
 

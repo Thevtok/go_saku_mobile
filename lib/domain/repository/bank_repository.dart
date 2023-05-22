@@ -29,13 +29,23 @@ class BankRepositoryImpl implements BankRepository {
   Future<List<Bank>> getByUserID(int id) async {
     try {
       final token = await HiveService.getToken();
-      final response = await _apiClient.getList(
+      final response = await _apiClient.getListBank(
         '/user/bank/$id',
         headers: {'Authorization': '$token'},
       );
-      final List<Bank> bankList =
-          response.map((bankJson) => Bank.fromJson(bankJson)).toList();
-      return bankList;
+
+      if (response == null) {
+        // Respons null, mengembalikan daftar bank kosong
+        return [];
+      }
+
+      if (response is List) {
+        final List<Bank> bankList = List<Bank>.from(
+            response.map((bankJson) => Bank.fromJson(bankJson)));
+        return bankList;
+      } else {
+        throw Exception('Invalid response format. Expected List.');
+      }
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
     }
