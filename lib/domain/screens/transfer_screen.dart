@@ -2,37 +2,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_saku/app/controller/textediting_controller.dart';
+
 import 'package:go_saku/app/widgets/transfer_widget.dart';
-import 'package:go_saku/domain/model/transaction.dart';
-import 'package:go_saku/domain/repository/transaction_repository.dart';
 import 'package:go_saku/domain/repository/user_repository.dart';
-import 'package:go_saku/domain/screens/history_screen.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
-import 'package:go_saku/domain/use_case/transaction_usecase.dart';
 import 'package:go_saku/domain/use_case/user_usecase.dart';
 
-import '../../app/circular_indicator/customCircular.dart';
-import '../../app/dialog/showDialog.dart';
-import '../../app/message/snackbar.dart';
+import '../../app/controller/transaction_controller.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
 import '../model/user.dart';
 
 class transfer_Screen extends StatelessWidget {
   const transfer_Screen({super.key});
-  void dispose() {
-    amountController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    bool confirmed = false;
+    TransactionController tx = TransactionController();
+
     final apiClient = ApiClient();
     final userRepo = UserRepositoryImpl(apiClient);
     final userUsecase = UserUseCaseImpl(userRepo);
-    final txRepo = TransactionRepositoryImpl(apiClient);
-    final txUsecase = TransactionUsecaseImpl(txRepo);
+
     final sender = getTokenUsername().then((String? username) {
       if (username != null) {
         return userUsecase.findByUsername(username);
@@ -117,7 +108,7 @@ class transfer_Screen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: TextField(
-                                        controller: phoneController,
+                                        controller: tx.phoneController,
                                         keyboardType: TextInputType.phone,
                                         decoration: const InputDecoration(
                                           labelText: 'Enter phone number',
@@ -197,7 +188,7 @@ class transfer_Screen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 20),
                                 child: TextField(
-                                  controller: amountController,
+                                  controller: tx.amountController,
                                   keyboardType: TextInputType.phone,
                                   decoration: const InputDecoration(
                                     contentPadding:
@@ -243,94 +234,7 @@ class transfer_Screen extends StatelessWidget {
                                       color: Colors.transparent,
                                       child: InkWell(
                                         onTap: () async {
-                                          final String phoneNumber =
-                                              phoneController.text;
-                                          int? amount = int.tryParse(
-                                              amountController.text);
-                                          final recipient = await userUsecase
-                                              .findByPhone(phoneNumber);
-                                          final id = await getTokenUserId();
-
-                                          if (recipient == null) {
-                                            showSnackBar(
-                                                context, 'Recipient not found');
-                                            return;
-                                          }
-
-                                          if (!confirmed) {
-                                            final confirmedResult =
-                                                await showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                      'Confirm Transfer'),
-                                                  content: Text(
-                                                      'Are you sure you want to transfer $amount to ${recipient.username}?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      child:
-                                                          const Text('Cancel'),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(false);
-                                                      },
-                                                    ),
-                                                    ElevatedButton(
-                                                      child:
-                                                          const Text('Confirm'),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(true);
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-
-                                            if (confirmedResult == null ||
-                                                !confirmedResult) {
-                                              return;
-                                            } else {
-                                              confirmed = true;
-                                            }
-                                          }
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: false,
-                                            builder: (BuildContext context) {
-                                              return const CustomCircularProgressIndicator(
-                                                message: 'Loading',
-                                              );
-                                            },
-                                          );
-
-                                          Transfer transfer = Transfer(
-                                            senderName: user!.username,
-                                            senderPhone: user.phoneNumber,
-                                            recipientName: recipient.username,
-                                            recipientPhone: phoneNumber,
-                                            amount: amount,
-                                          );
-
-                                          final result = await txUsecase
-                                              .makeTransfer(id!, transfer);
-
-                                          if (result != null) {
-                                            showCustomDialog(
-                                              context,
-                                              'success',
-                                              'Transfer successfully',
-                                              () {
-                                                Navigator.of(context).pop();
-                                                Get.off(const HistoryPage());
-                                              },
-                                            );
-                                          } else {
-                                            showSnackBar(
-                                                context, 'Failed to transfer');
-                                          }
+                                          tx.makeTransfer(context, user!);
                                         },
                                         splashColor: Colors.blueAccent.shade100,
                                         child: const Center(

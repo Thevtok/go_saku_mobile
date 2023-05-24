@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_saku/app/widgets/bank_widget.dart';
+import 'package:go_saku/app/widgets/deposit_widget.dart';
 import 'package:go_saku/domain/screens/bank.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
-import '../../app/controller/textediting_controller.dart';
+
+import '../../app/controller/transaction_controller.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
 import '../model/bank.dart';
@@ -15,22 +16,19 @@ import '../use_case/bank_usecase.dart';
 
 class DepositPage extends StatefulWidget {
   const DepositPage({Key? key}) : super(key: key);
-  void dispose() {
-    amountController.dispose();
-  }
 
   @override
   _DepositPageState createState() => _DepositPageState();
 }
 
 class _DepositPageState extends State<DepositPage> {
+  TransactionController tx = TransactionController();
   final apiClient = ApiClient();
   late final bankRepo;
   late final bankUsecase;
 
   late Future<List<Bank>?> _bankListFuture;
   late int _selectedBankId;
-  late TextEditingController _amountController;
 
   @override
   void initState() {
@@ -45,12 +43,11 @@ class _DepositPageState extends State<DepositPage> {
       }
     });
     _selectedBankId = -1;
-    _amountController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _amountController.dispose();
+    tx.amountController.dispose();
     super.dispose();
   }
 
@@ -128,7 +125,7 @@ class _DepositPageState extends State<DepositPage> {
                           for (var bank in banks!)
                             DropdownMenuItem(
                               value: bank,
-                              child: buildBankListNoDelete([bank]),
+                              child: buildBankListDeposit([bank]),
                             ),
                         ],
                       ),

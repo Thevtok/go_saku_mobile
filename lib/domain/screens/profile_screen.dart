@@ -6,6 +6,7 @@ import 'package:go_saku/domain/screens/bank.dart';
 import 'package:go_saku/domain/screens/homepage.dart';
 import 'package:intl/intl.dart';
 
+import '../../app/widgets/appbar_profile.dart';
 import '../../app/widgets/profile_widget.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
@@ -79,60 +80,7 @@ class _profile_ScreenState extends State<profile_Screen> {
             final User user = snapshot.data!;
             // Access the 'result' field
             return Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: 200,
-                flexibleSpace: Stack(children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('lib/assets/abstrak.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 50),
-                          child: const SizedBox(
-                            height: 80,
-                            width: 80,
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundImage:
-                                  AssetImage('lib/assets/fikri.jpg'),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            user.name,
-                            style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            user.phoneNumber,
-                            style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w200),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ]),
-              ),
+              appBar: CustomAppBar(user: user),
               body: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -151,10 +99,9 @@ class _profile_ScreenState extends State<profile_Screen> {
                       Icons.arrow_forward,
                     ),
                     buildRowWithIconButton(
-                        "Bank Account", "1", Icons.arrow_forward, () {
+                        "Bank Account", "", Icons.arrow_forward, () {
                       Get.to(const BankPage());
                     }),
-                    buildRowWithIcon("Card Account", "1", Icons.arrow_forward),
                     Container(
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.only(top: 10, left: 10),

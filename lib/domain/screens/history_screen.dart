@@ -28,28 +28,9 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   late Future<List<Transaction>?> _transactionFuture;
   late Future<User?> _userResponseFuture;
-  late double containerHeight;
-  double initialContainerHeight = 0.0;
+
   int selectedMonth = DateTime.now().month;
   bool isExpanded = false;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    containerHeight = MediaQuery.of(context).size.height / 1.7;
-    initialContainerHeight = containerHeight;
-  }
-
-  void updateContainerHeight() {
-    setState(() {
-      containerHeight = MediaQuery.of(context).size.height * 0.9;
-    });
-  }
-
-  void resetContainerHeight() {
-    setState(() {
-      containerHeight = initialContainerHeight;
-    });
-  }
 
   @override
   void initState() {
@@ -78,8 +59,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isContainerUpdated = false;
-
     return FutureBuilder<List<Transaction>?>(
       future: _transactionFuture,
       builder:
@@ -187,92 +166,67 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                               Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Draggable(
-                                  axis: Axis.vertical,
-                                  feedback: Container(
-                                    height: containerHeight,
-                                    color: Colors.white,
-                                  ),
-                                  onDragEnd: (DraggableDetails details) {
-                                    setState(() {
-                                      containerHeight += details.offset.dy;
-                                      isContainerUpdated = true;
-                                    });
-                                  },
-                                  child: GestureDetector(
-                                    onDoubleTap: () {
-                                      if (!isContainerUpdated) {
-                                        resetContainerHeight();
-                                        isContainerUpdated = true;
-                                      }
-                                    },
-                                    child: Container(
-                                      height: containerHeight,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 10),
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                top: BorderSide(
-                                                  color: Color.fromARGB(
-                                                      255, 116, 114, 114),
-                                                  width: 5.0,
-                                                ),
-                                              ),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0),
-                                            child: const Text(
-                                              'Transaksi',
-                                              style: TextStyle(fontSize: 18.0),
+                                child: Container(
+                                  height: 500,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 10),
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Color.fromARGB(
+                                                  255, 116, 114, 114),
+                                              width: 5.0,
                                             ),
                                           ),
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: [
-                                                for (int i = 1; i <= 12; i++)
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        selectedMonth = i;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 16),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: const Text(
+                                          'Transaksi',
+                                          style: TextStyle(fontSize: 18.0),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            for (int i = 1; i <= 12; i++)
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    selectedMonth = i;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16),
+                                                  color: selectedMonth == i
+                                                      ? Colors.blue
+                                                      : Colors.white,
+                                                  child: Text(
+                                                    getMonthName(i),
+                                                    style: TextStyle(
                                                       color: selectedMonth == i
-                                                          ? Colors.blue
-                                                          : Colors.white,
-                                                      child: Text(
-                                                        getMonthName(i),
-                                                        style: TextStyle(
-                                                          color:
-                                                              selectedMonth == i
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
-                                                        ),
-                                                      ),
+                                                          ? Colors.white
+                                                          : Colors.black,
                                                     ),
                                                   ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.only(top: 50),
-                                            child: Text('Tidak ada transaksi'),
-                                          )
-                                        ],
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 50),
+                                        child: Text('Tidak ada transaksi'),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -388,88 +342,66 @@ class _HistoryPageState extends State<HistoryPage> {
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
-                          child: Draggable(
-                            axis: Axis.vertical,
-                            feedback: Container(
-                              height: containerHeight,
-                              color: Colors.white,
-                            ),
-                            onDragEnd: (DraggableDetails details) {
-                              setState(() {
-                                containerHeight += details.offset.dy;
-                                isContainerUpdated = true;
-                              });
-                            },
-                            child: GestureDetector(
-                              onDoubleTap: () {
-                                if (!isContainerUpdated) {
-                                  resetContainerHeight();
-                                  isContainerUpdated = true;
-                                }
-                              },
-                              child: Container(
-                                height: containerHeight,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(top: 10),
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: Color.fromARGB(
-                                                255, 116, 114, 114),
-                                            width: 5.0,
-                                          ),
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: const Text(
-                                        'Transaksi',
-                                        style: TextStyle(fontSize: 18.0),
+                          child: Container(
+                            height: 500,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 116, 114, 114),
+                                        width: 5.0,
                                       ),
                                     ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: [
-                                          for (int i = 1; i <= 12; i++)
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  selectedMonth = i;
-                                                });
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: const Text(
+                                    'Transaksi',
+                                    style: TextStyle(fontSize: 18.0),
+                                  ),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (int i = 1; i <= 12; i++)
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedMonth = i;
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            color: selectedMonth == i
+                                                ? Colors.blue
+                                                : Colors.white,
+                                            child: Text(
+                                              getMonthName(i),
+                                              style: TextStyle(
                                                 color: selectedMonth == i
-                                                    ? Colors.blue
-                                                    : Colors.white,
-                                                child: Text(
-                                                  getMonthName(i),
-                                                  style: TextStyle(
-                                                    color: selectedMonth == i
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                             ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: buildTransactionList(
-                                          filteredTransactions, selectedMonth),
-                                    ),
-                                  ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: buildTransactionList(
+                                      filteredTransactions, selectedMonth),
+                                ),
+                              ],
                             ),
                           ),
                         ),

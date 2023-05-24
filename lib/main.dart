@@ -45,9 +45,10 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Color.fromARGB(255, 43, 68, 207)));
-    return const GetMaterialApp(
+    return GetMaterialApp(
+      theme: ThemeData(primaryColor: Colors.blueAccent),
       debugShowCheckedModeBanner: false,
-      home: login_Screnn(),
+      home: const login_Screnn(),
     );
   }
 }

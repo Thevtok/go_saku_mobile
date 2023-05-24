@@ -106,236 +106,259 @@ class _HomePagState extends State<HomePage> {
                         fit: BoxFit.cover)),
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
-                  body: Stack(
-                    children: [
-                      const Positioned(
-                        top: 45,
-                        right: 20,
-                        child: Icon(
-                          Icons.notifications,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(top: 35, left: 20),
-                                child: const SizedBox(
-                                  height: 60,
-                                  width: 60,
-                                  child: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage:
-                                        AssetImage('lib/assets/fikri.jpg'),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, left: 20),
-                                child: Text(
-                                  'Hello ${user.username}',
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 15),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 120),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Availabe Balance",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              Text(
-                                  'Rp ${NumberFormat('#,###').format(user.balance)}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 10,
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 230),
-                          height: 800,
-                          width: 500,
-                          decoration: BoxDecoration(
+                  body: LayoutBuilder(builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                    return Stack(
+                      children: [
+                        Positioned(
+                          top: constraints.maxHeight * 0.05,
+                          right: constraints.maxWidth * 0.04,
+                          child: Icon(
+                            Icons.notifications,
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                            size: constraints.maxWidth * 0.08,
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.only(top: 70, right: 200),
-                                child: const Text(
-                                  "Payment List",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                    top: constraints.maxHeight * 0.05,
+                                    left: constraints.maxWidth * 0.04,
+                                  ),
+                                  child: SizedBox(
+                                    height: constraints.maxHeight * 0.08,
+                                    width: constraints.maxHeight * 0.08,
+                                    child: CircleAvatar(
+                                      radius: constraints.maxHeight * 0.05,
+                                      backgroundImage: const AssetImage(
+                                          'lib/assets/fikri.jpg'),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      buildColumnWithIcon(
-                                          'Internet', Icons.language,
-                                          color: Colors.red),
-                                      buildColumnWithIcon('PDAM', Icons.water,
-                                          color: Colors.blueAccent),
-                                      buildColumnWithIcon(
-                                          'Electric', Icons.electric_bolt,
-                                          color: Colors.amber),
-                                      buildColumnWithIcon(
-                                          'BPJS', Icons.health_and_safety,
-                                          color: Colors.green),
-                                    ],
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: constraints.maxHeight * 0.02,
+                                    left: constraints.maxWidth * 0.04,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      buildColumnWithIcon(
-                                          'Game', Icons.sports_esports,
-                                          color: Colors.purpleAccent),
-                                      buildColumnWithIcon(
-                                          'Voucher', Icons.card_giftcard,
-                                          color: Colors.green),
-                                      buildColumnWithIcon(
-                                          'Gold', Icons.attach_money,
-                                          color: Colors.amber),
-                                      buildColumnWithIcon(
-                                          'More', Icons.more_horiz,
-                                          color: Colors.black),
-                                    ],
+                                  child: Text(
+                                    'Hello ${user.username}',
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 15),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 30),
-                                    child: Row(
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: constraints.maxHeight * 0.12,
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Availabe Balance",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: constraints.maxWidth * 0.035,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                                Text(
+                                    'Rp ${NumberFormat('#,###').format(user.balance)}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: constraints.maxWidth * 0.09,
+                                        fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: constraints.maxHeight * 0.12,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: constraints.maxHeight * 0.18),
+                            height: constraints.maxHeight * 0.8,
+                            width: constraints.maxWidth,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: constraints.maxHeight * 0.1,
+                                    right: constraints.maxWidth * 0.4,
+                                  ),
+                                  child: const Text(
+                                    "Payment List",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
-                                      children: const [
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 70),
-                                          child: Text(
-                                            'Promo & Discount',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Text(
-                                          'See more',
-                                          style: TextStyle(
-                                              color: Colors.blueAccent,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500),
-                                        )
+                                      children: [
+                                        buildColumnWithIcon(
+                                            'Internet', Icons.language,
+                                            color: Colors.red),
+                                        buildColumnWithIcon('PDAM', Icons.water,
+                                            color: Colors.blueAccent),
+                                        buildColumnWithIcon(
+                                            'Electric', Icons.electric_bolt,
+                                            color: Colors.amber),
+                                        buildColumnWithIcon(
+                                            'BPJS', Icons.health_and_safety,
+                                            color: Colors.green),
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                                bottom: constraints.maxHeight * 0.4),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 80,
-                                width: 320,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 3),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        buildColumnWithIcon(
+                                            'Game', Icons.sports_esports,
+                                            color: Colors.purpleAccent),
+                                        buildColumnWithIcon(
+                                            'Voucher', Icons.card_giftcard,
+                                            color: Colors.green),
+                                        buildColumnWithIcon(
+                                            'Gold', Icons.attach_money,
+                                            color: Colors.amber),
+                                        buildColumnWithIcon(
+                                            'More', Icons.more_horiz,
+                                            color: Colors.black),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: constraints.maxHeight * 0.04),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: constraints.maxWidth *
+                                                    0.14),
+                                            child: Text(
+                                              'Promo & Discount',
+                                              style: TextStyle(
+                                                fontSize: constraints.maxWidth *
+                                                    0.045,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            'See more',
+                                            style: TextStyle(
+                                              color: Colors.blueAccent,
+                                              fontSize:
+                                                  constraints.maxWidth * 0.045,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildGestureDetectorWithIcon(() {
-                                      Get.off(const DepositPage());
-                                    }, Icons.wallet, 'Top Up'),
-                                    buildGestureDetectorWithIcon(() {
-                                      Get.off(const transfer_Screen());
-                                    }, Icons.send, 'Transfer'),
-                                    buildGestureDetectorWithIcon(() {
-                                      Get.off(const WithdrawPage());
-                                    }, Icons.local_atm, 'Withdraw'),
-                                    buildGestureDetectorWithIcon(() {
-                                      Get.off(const HistoryPage());
-                                    }, Icons.history, 'History'),
-                                  ],
-                                ),
-                              ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height *
-                              0.78, // Ubah nilai 0.675 sesuai kebutuhan Anda
-                          left: MediaQuery.of(context).size.width *
-                              0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
-                        ),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              buildImageContainer('lib/assets/flip1.jpg'),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width *
-                                    0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
-                              ),
-                              buildImageContainer('lib/assets/flip2.png'),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width *
-                                    0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
-                              ),
-                              buildImageContainer('lib/assets/flip3.jpg'),
-                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final containerHeight =
+                                constraints.maxHeight * 0.12;
+                            final containerWidth = constraints.maxWidth * 0.8;
+
+                            return Container(
+                              margin: EdgeInsets.only(
+                                  bottom: constraints.maxHeight * 0.4),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: containerHeight,
+                                  width: containerWidth,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      buildGestureDetectorWithIcon(() {
+                                        Get.to(const DepositPage());
+                                      }, Icons.wallet, 'Top Up'),
+                                      buildGestureDetectorWithIcon(() {
+                                        Get.to(const transfer_Screen());
+                                      }, Icons.send, 'Transfer'),
+                                      buildGestureDetectorWithIcon(() {
+                                        Get.to(const WithdrawPage());
+                                      }, Icons.local_atm, 'Withdraw'),
+                                      buildGestureDetectorWithIcon(() {
+                                        Get.to(const HistoryPage());
+                                      }, Icons.history, 'History'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height *
+                                0.78, // Ubah nilai 0.675 sesuai kebutuhan Anda
+                            left: MediaQuery.of(context).size.width *
+                                0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                buildImageContainer('lib/assets/flip1.jpg'),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
+                                ),
+                                buildImageContainer('lib/assets/flip2.png'),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.05, // Ubah nilai 0.05 sesuai kebutuhan Anda
+                                ),
+                                buildImageContainer('lib/assets/flip3.jpg'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                   bottomNavigationBar: BottomNavigationBar(
                     items: const <BottomNavigationBarItem>[
                       BottomNavigationBarItem(

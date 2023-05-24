@@ -6,7 +6,8 @@ import 'package:go_saku/app/widgets/withdraw_widget.dart';
 import 'package:go_saku/domain/screens/bank.dart';
 
 import '../../app/circular_indicator/customCircular.dart';
-import '../../app/controller/textediting_controller.dart';
+
+import '../../app/controller/transaction_controller.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
 import '../model/bank.dart';
@@ -15,22 +16,19 @@ import '../use_case/bank_usecase.dart';
 
 class WithdrawPage extends StatefulWidget {
   const WithdrawPage({Key? key}) : super(key: key);
-  void dispose() {
-    amountController.dispose();
-  }
 
   @override
   _WithdrawPageState createState() => _WithdrawPageState();
 }
 
 class _WithdrawPageState extends State<WithdrawPage> {
+  TransactionController tx = TransactionController();
   final apiClient = ApiClient();
   late final bankRepo;
   late final bankUsecase;
 
   late Future<List<Bank>?> _bankListFuture;
   late int _selectedBankId;
-  late TextEditingController amountController;
 
   @override
   void initState() {
@@ -45,12 +43,11 @@ class _WithdrawPageState extends State<WithdrawPage> {
       }
     });
     _selectedBankId = -1;
-    amountController = TextEditingController();
   }
 
   @override
   void dispose() {
-    amountController.dispose();
+    tx.amountController.dispose();
     super.dispose();
   }
 

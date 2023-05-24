@@ -1,23 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_saku/domain/model/transaction.dart';
-import 'package:go_saku/domain/screens/history_screen.dart';
 
-import '../../core/network/api_user.dart';
 import '../../domain/model/bank.dart';
-import '../../domain/repository/transaction_repository.dart';
-import '../../domain/use_case/transaction_usecase.dart';
-import '../circular_indicator/customCircular.dart';
-import '../controller/textediting_controller.dart';
-import '../dialog/showDialog.dart';
-import '../message/snackbar.dart';
+import '../controller/transaction_controller.dart';
 
 Widget buildBankWithdraw(List<Bank>? banks) {
-  final apiClient = ApiClient();
-  final txRepo = TransactionRepositoryImpl(apiClient);
-  final txUsecase = TransactionUsecaseImpl(txRepo);
+  TransactionController tx = TransactionController();
 
   if (banks == null) {
     // Tangani ketika banks null
@@ -55,76 +44,7 @@ Widget buildBankWithdraw(List<Bank>? banks) {
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: InkWell(
           onTap: () async {
-            int? selectedAccountId = bank.accountId;
-            bool confirmed = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Konfirmasi'),
-                  content: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: amountController,
-                    decoration: const InputDecoration(
-                      labelText: 'Jumlah withdraw',
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: const Text('Ya'),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pop(true); // Mengirim nilai true jika "Ya" ditekan
-                      },
-                    ),
-                    TextButton(
-                      child: const Text('Tidak'),
-                      onPressed: () {
-                        Navigator.of(context).pop(
-                            false); // Mengirim nilai false jika "Tidak" ditekan
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-
-            if (confirmed == true) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return const CustomCircularProgressIndicator(
-                    message: 'Loading',
-                  );
-                },
-              );
-              int? amount = int.tryParse(amountController.text);
-              Withdraw withdraw = Withdraw(
-                  accountHolderName: bank.name,
-                  amount: amount,
-                  bankName: bank.bankName,
-                  accountNumber: bank.accountNumber);
-
-              final result = await txUsecase.createWithdraw(
-                  bank.userId!, selectedAccountId!, withdraw);
-
-              // Lanjutkan dengan logika setelah metode unregByAccId
-              if (result != null) {
-                // Bank berhasil dihapus
-                showCustomDialog(
-                  context,
-                  'Sukses',
-                  'Withdraw to Bank Sukses',
-                  () {
-                    Navigator.of(context).pop(); // Tutup dialog
-                    Get.off(const HistoryPage()); // Navigasi ke BankPage
-                  },
-                );
-              } else {
-                // Gagal menghapus bank
-                showSnackBar(context, 'Gagal withdraw to bank');
-              }
-            }
+            await tx.withdraw(context, bank);
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
