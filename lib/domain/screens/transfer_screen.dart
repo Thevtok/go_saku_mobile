@@ -44,9 +44,9 @@ class transfer_Screen extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final double containerWidth = size.width * 1;
     final double containerHeight = size.height * 1;
-    return FutureBuilder<UserResponse?>(
+    return FutureBuilder<User?>(
         future: sender,
-        builder: (BuildContext context, AsyncSnapshot<UserResponse?> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           final user = snapshot.data;
           return Container(
               decoration: const BoxDecoration(

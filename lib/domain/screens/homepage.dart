@@ -44,13 +44,14 @@ class _HomePagState extends State<HomePage> {
         ],
       ),
     );
-    if (exitConfirmation ?? false) {
+    if (exitConfirmation) {
       SystemNavigator.pop(); // Exit the application
     }
 
     return Future.value(false);
   }
 
+  late Future<User?> _userResponseFuture;
   late ApiClient apiClient;
   late UserRepository userRepository;
   late UserUseCase userUsecase;
@@ -78,24 +79,25 @@ class _HomePagState extends State<HomePage> {
     apiClient = ApiClient();
     userRepository = UserRepositoryImpl(apiClient);
     userUsecase = UserUseCaseImpl(userRepository);
+    _userResponseFuture = getTokenUsername().then((String? username) {
+      if (username != null) {
+        return userUsecase.findByUsername(username);
+      } else {
+        throw Exception('Username tidak tersedia');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: FutureBuilder<UserResponse?>(
-          future: getTokenUsername().then((String? username) {
-            if (username != null) {
-              return userUsecase.findByUsername(username);
-            } else {
-              throw Exception('Username tidak tersedia');
-            }
-          }),
+      child: FutureBuilder<User?>(
+          future: _userResponseFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
-              final UserResponse user = snapshot.data!;
+              final User user = snapshot.data!;
 
               return Container(
                 decoration: const BoxDecoration(

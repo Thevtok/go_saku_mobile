@@ -12,7 +12,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   Future<String> createDepositBank(
-      int user_id, int account_id, DepositBank depositBank) async {
+      String user_id, int account_id, DepositBank depositBank) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.post(
       path: '/user/tx/depo/bank/$user_id/$account_id',
@@ -28,7 +28,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   Future<String> withdraw(
-      int user_id, int account_id, Withdraw withdraw) async {
+      String user_id, int account_id, Withdraw withdraw) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.post(
       path: '/user/tx/wd/$user_id/$account_id',
@@ -43,7 +43,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<String> createTransfer(int user_id, Transfer transfer) async {
+  Future<String> createTransfer(String user_id, Transfer transfer) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.post(
       path: '/user/tx/tf/$user_id',
@@ -58,7 +58,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<List<Transaction>?> getByUserID(int id) async {
+  Future<List<Transaction>?> getByUserID(String id) async {
     try {
       final token = await HiveService.getToken();
       final response = await _apiClient.getListTx(

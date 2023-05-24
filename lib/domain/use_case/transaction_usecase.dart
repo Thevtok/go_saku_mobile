@@ -11,24 +11,24 @@ class TransactionUsecaseImpl implements TransactionUsecase {
 
   @override
   Future<String> makeDepositBank(
-      int user_id, int account_id, DepositBank depositBank) async {
+      String user_id, int account_id, DepositBank depositBank) async {
     return await transactionRepository.createDepositBank(
         user_id, account_id, depositBank);
   }
 
   @override
   Future<String> createWithdraw(
-      int user_id, int account_id, Withdraw withdraw) async {
+      String user_id, int account_id, Withdraw withdraw) async {
     return await transactionRepository.withdraw(user_id, account_id, withdraw);
   }
 
   @override
-  Future<String> makeTransfer(int user_id, Transfer transfer) async {
+  Future<String> makeTransfer(String user_id, Transfer transfer) async {
     return await transactionRepository.createTransfer(user_id, transfer);
   }
 
   @override
-  Future<List<Transaction>?> findTxByUserID(int id) async {
+  Future<List<Transaction>?> findTxByUserID(String id) async {
     return await transactionRepository.getByUserID(id);
   }
 }

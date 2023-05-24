@@ -64,7 +64,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<UserResponse?> getByUsername(String username) async {
+  Future<User?> getByUsername(String username) async {
     try {
       final token = await HiveService.getToken();
       final response = await _apiClient.get(
@@ -73,7 +73,7 @@ class UserRepositoryImpl implements UserRepository {
       );
 
       if (response != null) {
-        final user = UserResponse.fromJson(response);
+        final user = User.fromJson(response);
         return user;
       } else {
         return null;
@@ -84,7 +84,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<UserResponse?> getByPhone(String phone) async {
+  Future<User?> getByPhone(String phone) async {
     try {
       final token = await HiveService.getToken();
       final response = await _apiClient.get(
@@ -93,7 +93,7 @@ class UserRepositoryImpl implements UserRepository {
       );
 
       if (response != null) {
-        final user = UserResponse.fromJson(response);
+        final user = User.fromJson(response);
         return user;
       } else {
         return null;
@@ -104,7 +104,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<String> delete(int id) async {
+  Future<String> delete(String id) async {
     final response = await _apiClient.delete(path: '/user/$id');
     if (response['statusCode'] == 204) {
       return 'User deleted successfully';

@@ -26,6 +26,8 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  late Future<List<Transaction>?> _transactionFuture;
+  late Future<User?> _userResponseFuture;
   late double containerHeight;
   double initialContainerHeight = 0.0;
   int selectedMonth = DateTime.now().month;
@@ -50,34 +52,42 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final apiClient = ApiClient();
+    final userRepo = UserRepositoryImpl(apiClient);
+    final userUsecase = UserUseCaseImpl(userRepo);
+    final txRepo = TransactionRepositoryImpl(apiClient);
+    final txUsecase = TransactionUsecaseImpl(txRepo);
+
+    _transactionFuture = getTokenUserId().then((String? id) {
+      if (id != null) {
+        return txUsecase.findTxByUserID(id);
+      } else {
+        throw Exception('user_id tidak tersedia');
+      }
+    });
+    _userResponseFuture = getTokenUsername().then((String? username) {
+      if (username != null) {
+        return userUsecase.findByUsername(username);
+      } else {
+        throw Exception('Username tidak tersedia');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isContainerUpdated = false;
 
-    final apiClient = ApiClient();
-    final txRepo = TransactionRepositoryImpl(apiClient);
-    final txUsecase = TransactionUsecaseImpl(txRepo);
-    final userRepository = UserRepositoryImpl(apiClient);
-    final userUsecase = UserUseCaseImpl(userRepository);
     return FutureBuilder<List<Transaction>?>(
-      future: getTokenUserId().then((int? id) {
-        if (id != null) {
-          return txUsecase.findTxByUserID(id);
-        } else {
-          throw Exception('user_id tidak tersedia');
-        }
-      }),
+      future: _transactionFuture,
       builder:
           (BuildContext context, AsyncSnapshot<List<Transaction>?> snapshot) {
         if (snapshot.data == null || snapshot.data!.isEmpty) {
           return Scaffold(
-              body: FutureBuilder<UserResponse?>(
-                  future: getTokenUsername().then((String? username) {
-                    if (username != null) {
-                      return userUsecase.findByUsername(username);
-                    } else {
-                      throw Exception('Username tidak tersedia');
-                    }
-                  }),
+              body: FutureBuilder<User?>(
+                  future: _userResponseFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
@@ -278,17 +288,11 @@ class _HistoryPageState extends State<HistoryPage> {
 
         List<Transaction> filteredTransactions = transactions
             .where((transaction) =>
-                transaction.transactionDate.month == selectedMonth)
+                transaction.transaction_date.month == selectedMonth)
             .toList();
 
-        return FutureBuilder<UserResponse?>(
-            future: getTokenUsername().then((String? username) {
-              if (username != null) {
-                return userUsecase.findByUsername(username);
-              } else {
-                throw Exception('Username tidak tersedia');
-              }
-            }),
+        return FutureBuilder<User?>(
+            future: _userResponseFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {

@@ -3,9 +3,9 @@
 import 'package:go_saku/domain/model/bank.dart';
 
 abstract class BankRepository {
-  Future<List<Bank>?> getByUserID(int id);
-  Future<Bank> getByAccountID(int userId, int accountId);
+  Future<List<Bank>?> getByUserID(String id);
+  Future<Bank> getByAccountID(String userId, int accountId);
 
-  Future<dynamic> create(int id, Bank newBankAcc);
-  Future<String> deleteByAccId(int userId, int accountId);
+  Future<dynamic> create(String id, Bank newBankAcc);
+  Future<String> deleteByAccId(String userId, int accountId);
 }

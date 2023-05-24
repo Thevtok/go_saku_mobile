@@ -18,7 +18,7 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
   }
 
   List<Transaction> filteredTransactions = transactions
-      .where((transaction) => transaction.transactionDate.month == month)
+      .where((transaction) => transaction.transaction_date.month == month)
       .toList();
 
   if (filteredTransactions.isEmpty) {
@@ -31,13 +31,13 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
     itemCount: filteredTransactions.length,
     itemBuilder: (context, index) {
       Transaction transaction = filteredTransactions[index];
-      if (transaction.transactionType == 'Transfer') {
+      if (transaction.transaction_type == 'Transfer') {
         return FutureBuilder<String?>(
             future: getTransactionTitle(transaction),
             builder: (context, snapshot) {
               final username = snapshot.data;
               return ListTile(
-                leading: transaction.senderName == username
+                leading: transaction.transfer_sender_name == username
                     ? const Icon(
                         Icons.arrow_circle_right,
                         color: Colors.redAccent,
@@ -49,25 +49,25 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
                 title: Padding(
                   padding: const EdgeInsets.only(
                       bottom: 4.0), // Tambahkan jarak pada bagian bawah title
-                  child: transaction.senderName == username
+                  child: transaction.transfer_sender_name == username
                       ? const Text('Transfer Keluar')
                       : const Text('Transfer Masuk'),
                 ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(username == transaction.recipientName
-                        ? 'Transfer dari ${transaction.senderNumber} ${transaction.senderName.toUpperCase()}'
-                        : 'Transfer ke ${transaction.recipientNumber} ${transaction.recipientName.toUpperCase()} '),
+                    Text(username == transaction.transfer_recipient_name
+                        ? 'Transfer dari ${transaction.transfer_sender_phone} ${transaction.transfer_sender_name!.toUpperCase()}'
+                        : 'Transfer ke ${transaction.transfer_recipient_phone} ${transaction.transfer_recipient_name!.toUpperCase()} '),
                     Text(
                       DateFormat('yyyy-MM-dd')
-                          .format(transaction.transactionDate),
+                          .format(transaction.transaction_date),
                     ),
                   ],
                 ),
-                trailing: transaction.senderName == username
+                trailing: transaction.transfer_sender_name == username
                     ? Text(
-                        '-Rp.${NumberFormat('#,###').format(transaction.amount)}',
+                        '-Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -75,7 +75,7 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
                         ),
                       )
                     : Text(
-                        '+Rp.${NumberFormat('#,###').format(transaction.amount)}',
+                        '+Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -84,7 +84,7 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
                       ),
               );
             });
-      } else if (transaction.transactionType == 'Deposit Bank') {
+      } else if (transaction.transaction_type == 'Deposit') {
         return ListTile(
           leading: const Icon(
             Icons.credit_card,
@@ -98,15 +98,15 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Top up dari ${transaction.bankName} ${transaction.accountNumber} ${transaction.senderName.toUpperCase()}',
+                'Top up dari ${transaction.deposit_bank_name} ${transaction.deposit_bank_number} ${transaction.deposit_account_bank_name!.toUpperCase()}',
               ),
               Text(
-                DateFormat('yyyy-MM-dd').format(transaction.transactionDate),
+                DateFormat('yyyy-MM-dd').format(transaction.transaction_date),
               ),
             ],
           ),
           trailing: Text(
-            '+Rp.${NumberFormat('#,###').format(transaction.amount)}',
+            '+Rp.${NumberFormat('#,###').format(transaction.deposit_amount)}',
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
@@ -114,7 +114,7 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
             ),
           ),
         );
-      } else if (transaction.transactionType == 'Withdraw') {
+      } else if (transaction.transaction_type == 'Withdraw') {
         return ListTile(
           leading: const Icon(
             Icons.local_atm,
@@ -128,15 +128,15 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Penarikan ke ${transaction.bankName} ${transaction.accountNumber} ${transaction.senderName.toUpperCase()}',
+                'Penarikan ke ${transaction.withdraw_bank_name} ${transaction.withdraw_bank_number} ${transaction.withdraw_account_bank_name!.toUpperCase()}',
               ),
               Text(
-                DateFormat('yyyy-MM-dd').format(transaction.transactionDate),
+                DateFormat('yyyy-MM-dd').format(transaction.transaction_date),
               ),
             ],
           ),
           trailing: Text(
-            '-Rp.${NumberFormat('#,###').format(transaction.amount)}',
+            '-Rp.${NumberFormat('#,###').format(transaction.withdraw_amount)}',
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,

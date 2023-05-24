@@ -51,87 +51,69 @@ class _login_ScrennState extends State<login_Screnn> {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('lib/assets/login_saku.png'),
+              image: AssetImage('lib/assets/login.png'),
               fit: BoxFit.fitHeight)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.25),
-                    child: const Text(
-                      'Go Saku',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.01),
-                    child: const Text(
-                      'For Simple Payment',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
+        body: Align(
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                Container(
-                  height: 120,
-                  margin: const EdgeInsets.only(left: 20, right: 20, top: 300),
-                  padding: const EdgeInsets.only(right: 10, left: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.white),
-                  child: Column(
-                    children: [
-                      buildTextField(
-                          'Email', Icons.email_rounded, emailController),
-                      TextField(
-                        controller: passwordController,
-                        obscureText: _isObscured,
-                        style: const TextStyle(color: Colors.blueAccent),
-                        cursorColor: Colors.blueAccent,
-                        decoration: InputDecoration(
-                          icon: const Icon(
-                            Icons.lock,
-                            color: Colors.blueAccent,
-                          ),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blueAccent),
-                          ),
-                          labelText: 'Password',
-                          labelStyle: const TextStyle(color: Colors.blueAccent),
-                          suffixIcon: InkWell(
-                            onTap: _toggleObscureText,
-                            child: Icon(
-                              _isObscured
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.grey,
+                LayoutBuilder(builder: (context, constraints) {
+                  double screenHeight = MediaQuery.of(context).size.height;
+                  double containerHeight = screenHeight * 0.17;
+                  double screenWidth = MediaQuery.of(context).size.width;
+                  double containerWidth = screenWidth * 0.9;
+                  double containerMargin = screenHeight * 0.2;
+
+                  return Container(
+                    margin: EdgeInsets.only(top: containerMargin),
+                    height: containerHeight,
+                    width: containerWidth,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          buildTextField(
+                              'Email', Icons.email_rounded, emailController),
+                          TextField(
+                            controller: passwordController,
+                            obscureText: _isObscured,
+                            style: const TextStyle(color: Colors.blueAccent),
+                            cursorColor: Colors.blueAccent,
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                Icons.lock,
+                                color: Colors.blueAccent,
+                              ),
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.blueAccent),
+                              ),
+                              labelText: 'Password',
+                              labelStyle:
+                                  const TextStyle(color: Colors.blueAccent),
+                              suffixIcon: InkWell(
+                                onTap: _toggleObscureText,
+                                child: Icon(
+                                  _isObscured
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
                 Column(
                   children: [
                     Container(
@@ -224,7 +206,7 @@ class _login_ScrennState extends State<login_Screnn> {
                 )
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

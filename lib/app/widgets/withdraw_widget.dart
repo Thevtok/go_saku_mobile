@@ -100,7 +100,7 @@ Widget buildBankWithdraw(List<Bank>? banks) {
               );
               int? amount = int.tryParse(amountController.text);
               Withdraw withdraw = Withdraw(
-                  senderName: bank.name,
+                  accountHolderName: bank.name,
                   amount: amount,
                   bankName: bank.bankName,
                   accountNumber: bank.accountNumber);

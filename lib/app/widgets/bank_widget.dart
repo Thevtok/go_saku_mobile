@@ -59,7 +59,7 @@ Widget buildBankList(List<Bank>? banks) {
             icon: const Icon(Icons.delete),
             onPressed: () async {
               int? selectedAccountId = bank.accountId;
-              int? selectedUserId = bank.userId;
+              String? selectedUserId = bank.userId;
 
               bool confirmed = await showDialog(
                 context: context,
@@ -214,7 +214,7 @@ Widget buildBankListNoDelete(List<Bank>? banks) {
               );
               int? amount = int.tryParse(amountController.text);
               DepositBank depo = DepositBank(
-                  senderName: bank.name,
+                  accountHolderName: bank.name,
                   amount: amount,
                   bankName: bank.bankName,
                   accountNumber: bank.accountNumber);

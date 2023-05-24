@@ -4,8 +4,9 @@ import '../../transaction.dart';
 
 abstract class TransactionUsecase {
   Future<String> makeDepositBank(
-      int user_id, int account_id, DepositBank depositBank);
-  Future<String> makeTransfer(int user_id, Transfer transfer);
-  Future<List<Transaction>?> findTxByUserID(int id);
-  Future<String> createWithdraw(int user_id, int account_id, Withdraw withdraw);
+      String user_id, int account_id, DepositBank depositBank);
+  Future<String> makeTransfer(String user_id, Transfer transfer);
+  Future<List<Transaction>?> findTxByUserID(String id);
+  Future<String> createWithdraw(
+      String user_id, int account_id, Withdraw withdraw);
 }

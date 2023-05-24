@@ -32,7 +32,7 @@ class UserUseCaseImpl implements UserUseCase {
   }
 
   @override
-  Future<UserResponse?> findByUsername(String username) async {
+  Future<User?> findByUsername(String username) async {
     try {
       return await _repository.getByUsername(username);
     } catch (e) {
@@ -41,7 +41,7 @@ class UserUseCaseImpl implements UserUseCase {
   }
 
   @override
-  Future<UserResponse?> findByPhone(String phone) async {
+  Future<User?> findByPhone(String phone) async {
     try {
       return await _repository.getByPhone(phone);
     } catch (e) {
@@ -83,7 +83,7 @@ class UserUseCaseImpl implements UserUseCase {
   }
 
   @override
-  Future<String?> unreg(int id) async {
+  Future<String?> unreg(String id) async {
     try {
       return await _repository.delete(id);
     } catch (e) {

@@ -26,7 +26,7 @@ class BankPage extends StatelessWidget {
     final bankUsecase = BankUseCaseImpl(bankRepo);
 
     return FutureBuilder<List<Bank>?>(
-        future: getTokenUserId().then((int? id) {
+        future: getTokenUserId().then((String? id) {
           if (id != null) {
             return bankUsecase.findByUserID(id);
           } else {

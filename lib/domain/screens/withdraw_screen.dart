@@ -37,7 +37,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
     bankRepo = BankRepositoryImpl(apiClient);
     bankUsecase = BankUseCaseImpl(bankRepo);
     super.initState();
-    _bankListFuture = getTokenUserId().then((int? id) {
+    _bankListFuture = getTokenUserId().then((String? id) {
       if (id != null) {
         return bankUsecase.findByUserID(id);
       } else {

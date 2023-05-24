@@ -9,8 +9,11 @@ import 'package:intl/intl.dart';
 import '../../app/widgets/profile_widget.dart';
 import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
+import '../model/abstract/repository/userRepo.dart';
+import '../model/abstract/usecase/userUsecase.dart';
 import '../model/user.dart';
 import '../repository/user_repository.dart';
+import '../use_case/user_usecase.dart';
 
 class profile_Screen extends StatefulWidget {
   const profile_Screen({Key? key}) : super(key: key);
@@ -20,11 +23,6 @@ class profile_Screen extends StatefulWidget {
 }
 
 class _profile_ScreenState extends State<profile_Screen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   int _selectedIndex = 2;
   void _onItemTapped(int index) {
     setState(() {
@@ -43,20 +41,31 @@ class _profile_ScreenState extends State<profile_Screen> {
     });
   }
 
+  late Future<User?> _userResponseFuture;
+  late ApiClient apiClient;
+  late UserRepository userRepository;
+  late UserUseCase userUsecase;
+
+  @override
+  void initState() {
+    super.initState();
+    apiClient = ApiClient();
+    userRepository = UserRepositoryImpl(apiClient);
+    userUsecase = UserUseCaseImpl(userRepository);
+    _userResponseFuture = getTokenUsername().then((String? username) {
+      if (username != null) {
+        return userUsecase.findByUsername(username);
+      } else {
+        throw Exception('Username tidak tersedia');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final apiClient = ApiClient();
-    final userRepository = UserRepositoryImpl(apiClient);
-
-    return FutureBuilder<UserResponse?>(
-        future: getTokenUsername().then((String? username) {
-          if (username != null) {
-            return userRepository.getByUsername(username);
-          } else {
-            throw Exception('Username tidak tersedia');
-          }
-        }),
-        builder: (context, AsyncSnapshot<UserResponse?> snapshot) {
+    return FutureBuilder<User?>(
+        future: _userResponseFuture,
+        builder: (context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Display a loading indicator while the future is in progress
             return const CircularProgressIndicator();
@@ -67,7 +76,7 @@ class _profile_ScreenState extends State<profile_Screen> {
             // Handle the case where no user data is available
             return const Text('No user data available');
           } else {
-            final UserResponse user = snapshot.data!;
+            final User user = snapshot.data!;
             // Access the 'result' field
             return Scaffold(
               appBar: AppBar(

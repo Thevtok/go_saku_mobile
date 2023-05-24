@@ -11,7 +11,7 @@ class BankRepositoryImpl implements BankRepository {
   BankRepositoryImpl(this._apiClient);
 
   @override
-  Future<String> create(int id, Bank newBankAcc) async {
+  Future<String> create(String id, Bank newBankAcc) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.post(
       path: '/user/bank/add/$id',
@@ -26,7 +26,7 @@ class BankRepositoryImpl implements BankRepository {
   }
 
   @override
-  Future<List<Bank>> getByUserID(int id) async {
+  Future<List<Bank>> getByUserID(String id) async {
     try {
       final token = await HiveService.getToken();
       final response = await _apiClient.getListBank(
@@ -52,7 +52,7 @@ class BankRepositoryImpl implements BankRepository {
   }
 
   @override
-  Future<String> deleteByAccId(int userId, int accountId) async {
+  Future<String> deleteByAccId(String userId, int accountId) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.delete(
       path: '/user/bank/$userId/$accountId',
@@ -67,7 +67,7 @@ class BankRepositoryImpl implements BankRepository {
   }
 
   @override
-  Future<Bank> getByAccountID(int userId, int accountId) async {
+  Future<Bank> getByAccountID(String userId, int accountId) async {
     final token = await HiveService.getToken();
     final response = await _apiClient.get(
       '/user/bank/$userId/$accountId',

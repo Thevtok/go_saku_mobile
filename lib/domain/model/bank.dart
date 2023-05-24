@@ -3,7 +3,7 @@ class Bank {
   final String bankName;
   final String name;
   int? accountId;
-  int? userId; // Nullable accountId
+  String? userId; // Nullable accountId
 
   Bank(
       {required this.accountNumber,
