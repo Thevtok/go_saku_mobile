@@ -1,6 +1,6 @@
 class Bank {
   final String accountNumber;
-  final String bankName;
+  String bankName;
   final String name;
   int? accountId;
   String? userId; // Nullable accountId

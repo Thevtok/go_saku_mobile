@@ -52,6 +52,7 @@ class _HomePagState extends State<HomePage> {
   }
 
   late Future<User?> _userResponseFuture;
+  late Future<Uint8List?> _userPhoto;
   late ApiClient apiClient;
   late UserRepository userRepository;
   late UserUseCase userUsecase;
@@ -79,6 +80,13 @@ class _HomePagState extends State<HomePage> {
     apiClient = ApiClient();
     userRepository = UserRepositoryImpl(apiClient);
     userUsecase = UserUseCaseImpl(userRepository);
+    _userPhoto = getTokenUserId().then((String? id) {
+      if (id != null) {
+        return userUsecase.getPhoto(id);
+      } else {
+        throw Exception('Username tidak tersedia');
+      }
+    });
     _userResponseFuture = getTokenUsername().then((String? username) {
       if (username != null) {
         return userUsecase.findByUsername(username);
@@ -95,8 +103,7 @@ class _HomePagState extends State<HomePage> {
       child: FutureBuilder<User?>(
           future: _userResponseFuture,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
+            if (snapshot.hasData) {
               final User user = snapshot.data!;
 
               return Container(
@@ -124,20 +131,52 @@ class _HomePagState extends State<HomePage> {
                           children: [
                             Column(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: constraints.maxHeight * 0.05,
-                                    left: constraints.maxWidth * 0.04,
-                                  ),
-                                  child: SizedBox(
-                                    height: constraints.maxHeight * 0.08,
-                                    width: constraints.maxHeight * 0.08,
-                                    child: CircleAvatar(
-                                      radius: constraints.maxHeight * 0.05,
-                                      backgroundImage: const AssetImage(
-                                          'lib/assets/fikri.jpg'),
-                                    ),
-                                  ),
+                                FutureBuilder<Uint8List?>(
+                                  future: _userPhoto,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else if (snapshot.hasData) {
+                                      final networkImage = snapshot.data;
+                                      return Container(
+                                        padding: EdgeInsets.only(
+                                          top: constraints.maxHeight * 0.05,
+                                          left: constraints.maxWidth * 0.04,
+                                        ),
+                                        child: SizedBox(
+                                            height:
+                                                constraints.maxHeight * 0.08,
+                                            width: constraints.maxHeight * 0.08,
+                                            child: ClipOval(
+                                              child: CircleAvatar(
+                                                radius: 50,
+                                                backgroundColor:
+                                                    Colors.transparent, //
+                                                backgroundImage:
+                                                    MemoryImage(networkImage!),
+                                              ),
+                                            )),
+                                      );
+                                    } else if (snapshot.data == null) {
+                                      return Container(
+                                        padding: EdgeInsets.only(
+                                          top: constraints.maxHeight * 0.05,
+                                          left: constraints.maxWidth * 0.04,
+                                        ),
+                                        child: SizedBox(
+                                            height:
+                                                constraints.maxHeight * 0.08,
+                                            width: constraints.maxHeight * 0.08,
+                                            child: CircleAvatar(
+                                              radius:
+                                                  constraints.maxHeight * 0.05,
+                                            )),
+                                      );
+                                    } else {
+                                      return const Text('no photo');
+                                    }
+                                  },
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(

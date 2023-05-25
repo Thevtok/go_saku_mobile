@@ -19,15 +19,19 @@ Widget buildBankList(List<Bank>? banks) {
       const double imageSize = 50.0; // Ukuran gambar yang diinginkan
 
       if (bank.bankName.toLowerCase() == 'mandiri') {
+        bank.bankName = bank.bankName.toUpperCase();
         bankImage = Image.asset('lib/assets/mandiri.png',
             width: imageSize, height: imageSize);
       } else if (bank.bankName.toLowerCase() == 'bca') {
+        bank.bankName = bank.bankName.toUpperCase();
         bankImage = Image.asset('lib/assets/bca.png',
             width: imageSize, height: imageSize);
       } else if (bank.bankName.toLowerCase() == 'bri') {
+        bank.bankName = bank.bankName.toUpperCase();
         bankImage = Image.asset('lib/assets/bri.png',
             width: imageSize, height: imageSize);
       } else if (bank.bankName.toLowerCase() == 'bni') {
+        bank.bankName = bank.bankName.toUpperCase();
         bankImage = Image.asset('lib/assets/bni.png',
             width: imageSize, height: imageSize);
       } else {

@@ -1,8 +1,11 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:go_saku/core/network/api_user.dart';
 import 'package:go_saku/domain/model/user.dart';
 
@@ -13,6 +16,22 @@ class UserRepositoryImpl implements UserRepository {
   final ApiClient _apiClient;
 
   UserRepositoryImpl(this._apiClient);
+  @override
+  Future<String> uploadPhoto(String userId, File file) async {
+    final token = await HiveService.getToken();
+    final response =
+        await _apiClient.postWithFormData('/user/photo/$userId', file, token!);
+    return response;
+  }
+
+  @override
+  Future<Uint8List?> getPhoto(String id) async {
+    final token = await HiveService.getToken();
+    final response = await _apiClient
+        .getPhoto('/user/photo/$id', headers: {'Authorization': '$token'});
+
+    return response;
+  }
 
   @override
   Future<String> create(User user) async {

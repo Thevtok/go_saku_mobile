@@ -1,5 +1,8 @@
 // ignore_for_file: file_names
 
+import 'dart:io';
+import 'dart:typed_data';
+
 import '../../user.dart';
 
 abstract class UserRepository {
@@ -10,4 +13,6 @@ abstract class UserRepository {
   Future<String> create(User user);
   Future<String> update(User user);
   Future<String> delete(String id);
+  Future<Uint8List?> getPhoto(String id);
+  Future<String> uploadPhoto(String userId, File file);
 }

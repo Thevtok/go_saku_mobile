@@ -21,13 +21,6 @@ class _login_ScrennState extends State<login_Screnn> {
   LoginController lg = LoginController();
 
   @override
-  void dispose() {
-    lg.emailController.dispose(); // Dispose of emailController
-    lg.passwordController.dispose(); // Dispose of passwordController
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double paddingHeight = screenHeight * 0.2;
@@ -75,7 +68,7 @@ class _login_ScrennState extends State<login_Screnn> {
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () async {
+                            onTap: () {
                               lg.login(context);
                             },
                             splashColor: Colors.blueAccent.shade100,

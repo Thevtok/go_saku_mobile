@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:go_saku/domain/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 
 import '../utils/hive_service.dart';
 
@@ -21,6 +23,43 @@ class ApiClient {
     } else {
       throw Exception('Failed to load data from API');
     }
+  }
+
+  Future<String> postWithFormData(String path, File file, String token) async {
+    final url = Uri.parse('$baseUrl$path');
+    var request = http.MultipartRequest('POST', url);
+
+    request.headers['Authorization'] = token;
+
+    request.files.add(await http.MultipartFile.fromPath('photo', file.path));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 201) {
+      return response.body;
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
+
+  Future<Uint8List?> getPhoto(String path,
+      {Map<String, String>? headers}) async {
+    const timeoutDuration = Duration(seconds: 10); // Misalnya, timeout 10 detik
+
+    final response = await http
+        .get(Uri.parse('$baseUrl$path'), headers: headers)
+        .timeout(timeoutDuration);
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else if (response.statusCode == 500) {
+      // Jika status code 500, mengembalikan null
+      return null;
+    } else {
+      "gagal ambil photo";
+    }
+    return null;
   }
 
   Future<dynamic> getListBank(String path,

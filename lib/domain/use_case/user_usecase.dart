@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:go_saku/domain/model/user.dart';
 
 import '../model/abstract/repository/userRepo.dart';
@@ -7,6 +10,15 @@ class UserUseCaseImpl implements UserUseCase {
   final UserRepository _repository;
 
   UserUseCaseImpl(this._repository);
+  @override
+  Future<String> postWithFormData(String id, File file) async {
+    return await _repository.uploadPhoto(id, file);
+  }
+
+  @override
+  Future<Uint8List?> getPhoto(String id) async {
+    return await _repository.getPhoto(id);
+  }
 
   @override
   Future<String?> login(String email, String password) async {

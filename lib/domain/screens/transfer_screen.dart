@@ -13,13 +13,18 @@ import '../../core/network/api_user.dart';
 import '../../core/utils/hive_service.dart';
 import '../model/user.dart';
 
-class transfer_Screen extends StatelessWidget {
+class transfer_Screen extends StatefulWidget {
   const transfer_Screen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TransactionController tx = TransactionController();
+  State<transfer_Screen> createState() => _transfer_ScreenState();
+}
 
+class _transfer_ScreenState extends State<transfer_Screen> {
+  TransactionController tx = TransactionController();
+
+  @override
+  Widget build(BuildContext context) {
     final apiClient = ApiClient();
     final userRepo = UserRepositoryImpl(apiClient);
     final userUsecase = UserUseCaseImpl(userRepo);
