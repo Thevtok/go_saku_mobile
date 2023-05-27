@@ -1,13 +1,15 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_saku/domain/screens/homepage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/network/api_user.dart';
+import '../../core/utils/hive_service.dart';
 import '../../domain/model/bank.dart';
 import '../../domain/model/transaction.dart';
 import '../../domain/repository/transaction_repository.dart';
-import '../../domain/screens/history_screen.dart';
 import '../../domain/use_case/transaction_usecase.dart';
 import '../circular_indicator/customCircular.dart';
 import '../controller/transaction_controller.dart';
@@ -22,7 +24,7 @@ Widget buildBankListDeposit(List<Bank>? banks) {
 
   if (banks == null) {
     // Tangani ketika banks null
-    return const SizedBox.shrink(); // Kembalikan widget kosong
+    return const SizedBox.shrink();
   }
   return ListView.builder(
     shrinkWrap: true,
@@ -56,6 +58,10 @@ Widget buildBankListDeposit(List<Bank>? banks) {
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: InkWell(
           onTap: () async {
+            // Replace with your snap token
+
+// Start the payment flow using snap token
+
             int? selectedAccountId = bank.accountId;
             bool confirmed = await showDialog(
               context: context,
@@ -99,6 +105,7 @@ Widget buildBankListDeposit(List<Bank>? banks) {
                   );
                 },
               );
+
               int? amount = int.tryParse(tx.amountController.text);
               DepositBank depo = DepositBank(
                   accountHolderName: bank.name,
@@ -111,6 +118,14 @@ Widget buildBankListDeposit(List<Bank>? banks) {
 
               // Lanjutkan dengan logika setelah metode unregByAccId
               if (result != null) {
+                String? redirectUrl = await HiveService.getRedirectUrl();
+
+                if (redirectUrl != null) {
+                  // Launch the redirect URL using URL launcher
+                  await launch(Uri.parse(redirectUrl).toString());
+                } else {
+                  showSnackBar(context, "Failed to get redirect URL");
+                }
                 // Bank berhasil dihapus
                 showCustomDialog(
                   context,
@@ -118,7 +133,7 @@ Widget buildBankListDeposit(List<Bank>? banks) {
                   'Deposit Bank Sukses',
                   () {
                     Navigator.of(context).pop(); // Tutup dialog
-                    Get.off(const HistoryPage()); // Navigasi ke BankPage
+                    Get.off(const HomePage());
                   },
                 );
               } else {

@@ -3,8 +3,42 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
+  static const String _midtransTokenBox = 'midtrans_token_box';
+  static const String _redirectUrlBox = 'redirect_url_box';
   static Future<void> init() async {
     await Hive.initFlutter();
+  }
+
+  static Future<void> saveMidtransToken(String token) async {
+    final box = await Hive.openBox<String>(_midtransTokenBox);
+    await box.put('midtrans_token', token);
+    await box.close();
+  }
+
+  static Future<String?> getMidtransToken() async {
+    final box = await Hive.openBox<String>(_midtransTokenBox);
+    final token = box.get('midtrans_token');
+    await box.close();
+    return token;
+  }
+
+  static Future<void> saveRedirectUrl(String url) async {
+    final box = await Hive.openBox<String>(_redirectUrlBox);
+    await box.put('redirect_url', url);
+    await box.close();
+  }
+
+  static Future<String?> getRedirectUrl() async {
+    final box = await Hive.openBox<String>(_redirectUrlBox);
+    final url = box.get('redirect_url');
+    await box.close();
+    return url;
+  }
+
+  static Future<void> deleteRedirectUrl() async {
+    final box = await Hive.openBox<String>(_redirectUrlBox);
+    await box.delete('redirect_url');
+    await box.close();
   }
 
   static Future<void> saveToken(String token) async {

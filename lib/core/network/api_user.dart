@@ -9,7 +9,7 @@ import 'dart:io';
 import '../utils/hive_service.dart';
 
 class ApiClient {
-  static const String baseUrl = "http://11.11.203.177:8080";
+  static const String baseUrl = "https://ae38-125-164-17-107.ap.ngrok.io";
 
   Future<Map<String, dynamic>> get(String path,
       {Map<String, String>? headers}) async {
@@ -45,7 +45,7 @@ class ApiClient {
 
   Future<Uint8List?> getPhoto(String path,
       {Map<String, String>? headers}) async {
-    const timeoutDuration = Duration(seconds: 10); // Misalnya, timeout 10 detik
+    const timeoutDuration = Duration(seconds: 30); // Misalnya, timeout 10 detik
 
     final response = await http
         .get(Uri.parse('$baseUrl$path'), headers: headers)
@@ -90,6 +90,20 @@ class ApiClient {
   }
 
   Future<Map<String, dynamic>> post(
+      {required String path,
+      required Map<String, dynamic> body,
+      headers}) async {
+    final response = await http.post(Uri.parse('$baseUrl$path'),
+        headers: headers, body: jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to post data to API');
+    }
+  }
+
+  Future<Map<String, dynamic>> postDeposit(
       {required String path,
       required Map<String, dynamic> body,
       headers}) async {

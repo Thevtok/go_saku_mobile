@@ -1,12 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.go_saku">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-   <application
+    <application
         android:label="go_saku"
         android:name="${applicationName}"
-        android:icon="@mipmap/saku">
+        android:icon="@mipmap/saku"
+        tools:replace="android:label"> <!-- Perhatikan penempatan 'tools:replace' di sini -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

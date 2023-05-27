@@ -66,21 +66,47 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
                   ],
                 ),
                 trailing: transaction.transfer_sender_name == username
-                    ? Text(
-                        '-Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.redAccent,
-                        ),
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '-Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            transaction.transfer_status!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
                       )
-                    : Text(
-                        '+Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.green,
-                        ),
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '+Rp.${NumberFormat('#,###').format(transaction.transfer_amount)}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.green,
+                            ),
+                          ),
+                          Text(
+                            transaction.transfer_status!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
                       ),
               );
             });
@@ -105,13 +131,26 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
               ),
             ],
           ),
-          trailing: Text(
-            '+Rp.${NumberFormat('#,###').format(transaction.deposit_amount)}',
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: Colors.green,
-            ),
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '+Rp.${NumberFormat('#,###').format(transaction.deposit_amount)}',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                transaction.deposit_status!,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blueAccent,
+                ),
+              ),
+            ],
           ),
         );
       } else if (transaction.transaction_type == 'Withdraw') {
@@ -135,13 +174,26 @@ Widget buildTransactionList(List<Transaction>? transactions, int month) {
               ),
             ],
           ),
-          trailing: Text(
-            '-Rp.${NumberFormat('#,###').format(transaction.withdraw_amount)}',
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: Colors.redAccent,
-            ),
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '+Rp.${NumberFormat('#,###').format(transaction.withdraw_amount)}',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                transaction.withdraw_status!,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blueAccent,
+                ),
+              ),
+            ],
           ),
         );
       }

@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:go_saku/domain/model/abstract/repository/transactionRepo.dart';
 
@@ -14,12 +14,21 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<String> createDepositBank(
       String user_id, int account_id, DepositBank depositBank) async {
     final token = await HiveService.getToken();
-    final response = await _apiClient.post(
+    final response = await _apiClient.postDeposit(
       path: '/user/tx/depo/bank/$user_id/$account_id',
       body: depositBank.toJson(),
       headers: {'Authorization': '$token'},
     );
     if (response['statusCode'] == 201) {
+      final depositResponse = DepositResponse.fromJson(response);
+      final midtransResult = depositResponse.result;
+      final midtransToken = midtransResult.token;
+      final redirectUrl = midtransResult.redirectUrl;
+      await HiveService.deleteRedirectUrl();
+      await HiveService.saveMidtransToken(midtransToken);
+      await HiveService.saveRedirectUrl(redirectUrl);
+      print(redirectUrl);
+
       return 'create deposit bank successfully';
     } else {
       throw Exception('Failed to deposit bank');

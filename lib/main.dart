@@ -26,9 +26,9 @@ Future<void> main() async {
       // Tangkap data yang dikirimkan oleh backend
       String title = message.notification!.title ?? '';
       String body = message.notification!.body ?? '';
-
-      showReceiveNotification(title, body);
       showTransferNotification(title, body);
+      showReceiveNotification(title, body);
+
       showDepositNotification(title, body);
       showWithdrawNotification(title, body);
     }
